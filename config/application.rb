@@ -19,7 +19,7 @@ DATA_DIR = File.expand_path('../../db/data', __FILE__)
 AIRCRAFT_DIR = File.join(DATA_DIR, 'aircraft')
 AIRMEN_DIR = File.join(DATA_DIR, 'airmen')
 
-module MongoAviationData
+module AviationData
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
