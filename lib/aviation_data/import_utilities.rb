@@ -1,9 +1,7 @@
 module AviationData
   module ImportUtilities
-    extend OutputUtilities
-
     def self.import_into_mongo(database, collection, path, fields)
-      run_step "Importing data into MongoDB" do
+      OutputUtilities.run_step "Importing data into MongoDB" do
         command = "mongoimport -d #{database} -c #{collection} --file #{path} -f #{fields.join(',')} --ignoreBlanks --drop --stopOnError"
         puts command
         system command
@@ -27,7 +25,7 @@ module AviationData
         }
       EOF
 
-      run_step "Converting date columns" do
+      OutputUtilities.run_step "Converting date columns" do
         `mongo #{database} --eval "#{column_conversions}"`
       end
     end

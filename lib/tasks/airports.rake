@@ -1,18 +1,13 @@
-class ImportHelper
-  def self.progress_message(message, &block)
-    print "#{message}... "
-    $stdout.flush
-    yield block
-    puts "done!"
-  end
-end
-
-DATA_PATH = "/home/zbelzer/projects/aviation_data"
+require 'aviation_data'
 
 namespace :airports do
+  desc "Clears and imports all current airport data"
+  task :import => [:clear, 'import:icao', 'import:faa', 'import:global']
+
   namespace :import do
+    # Global has the best names
     task :global => :environment do
-      file_path = "#{DATA_PATH}/data/airports/GlobalAirportDatabase/GlobalAirportDatabase.txt"
+      file_path = "#{AviationData::AIRPORT_PATH}/GlobalAirportDatabase/GlobalAirportDatabase.txt"
       headers = %w(icao iata name address country lat_deg lat_min lat_sec lat_dir lon_deg lon_min lon_sec lon_dir elevation) 
       count = 0
 
@@ -36,7 +31,7 @@ namespace :airports do
     end
 
     task :faa => :environment do
-      file_path = "#{DATA_PATH}/data/airports/airports.csv"
+      file_path = "#{AviationData::AIRPORT_PATH}/airports.csv"
       headers = %w(dummy code dummy latitude longitude magnetic_variance elevation dummy time_zone dummy name dummy)
       count = 0
 
@@ -68,7 +63,7 @@ namespace :airports do
     end
 
     task :icao => :environment do
-      file_path = "#{DATA_PATH}/data/airports/ICAO.airports.csv"
+      file_path = "#{AviationData::AIRPORT_PATH}/ICAO.airports.csv"
       headers = %w(icao iata name)
       count = 0
 
@@ -83,17 +78,11 @@ namespace :airports do
 
       puts "Imported or updated #{count} airports from #{File.basename(file_path)}"
     end
-
-    # Global has the best names
-    task :all => [:icao, :faa, :global]
   end
 
   task :clear => :environment do
-    ImportHelper.progress_message "Clearing current airports collection" do
+    AviationData::OutputUtilities.run_step "Clearing current airports collection" do
       Airport.delete_all
     end
   end
-
-  desc "Clears and imports all current airport data"
-  task :build => [:clear, "import:all"]
 end

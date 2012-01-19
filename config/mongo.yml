@@ -1,15 +1,15 @@
 development:
   host: localhost
-  database: avaition_data_development
+  database: aviation_data_development
 
 staging:
   host: localhost
-  database: avaition_data_development
+  database: aviation_data_development
 
 production:
   host: localhost
-  database: avaition_data_production
+  database: aviation_data_production
 
 test:
   host: localhost
-  database: avaition_data_test
+  database: aviation_data_test

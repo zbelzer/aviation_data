@@ -2,7 +2,7 @@ require 'benchmark'
 
 module AviationData
   module OutputUtilities
-    def run_step(step, &block)
+    def self.run_step(step, &block)
       if block_given?
         print "** #{step}..."
         $stdout.flush

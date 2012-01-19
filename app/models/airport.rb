@@ -5,13 +5,8 @@ class Airport
   key :iata, String
   key :longitude, Float
   key :latitude, Float
-  timestamps!
 
   ensure_index [[:icao, 1], [:iata, 1]]
-  
-  def self.create_or_update(find_keys, attributes)
-    collection.update(find_keys, attributes, :upsert => true)
-  end
   
   def self.make_coord_global(type, row)
     dir = row["#{type}_dir"]

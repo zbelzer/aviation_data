@@ -4,7 +4,6 @@ require 'csv'
 module AviationData
   module ConversionUtilities
     extend self
-    extend OutputUtilities
 
     def convert_to_json(original_path, fields)
       puts "Convertng #{original_path} to JSON"
@@ -23,19 +22,19 @@ module AviationData
     end
 
     def escape_quotes(path)
-      run_step "Escaping quotes" do
+      OutputUtilities.run_step "Escaping quotes" do
         `sed -r -i "s/\\"/'/g" #{path}`
       end
     end
 
     def prepend_n_number(path)
-      run_step "Prepending N to identifiers" do
+      OutputUtilities.run_step "Prepending N to identifiers" do
         `sed -r -i "s/^(.*)/N\\1/g" #{path}`
       end
     end
 
     def compress_whitespace(path)
-      run_step "Compressing whitespace" do
+      OutputUtilities.run_step "Compressing whitespace" do
         `sed -r -i "s/\s+,/,/g" #{path}`
         `sed -r -i "s/,\r//g" #{path}`
       end
@@ -43,7 +42,7 @@ module AviationData
 
     def extract_header(path)
       header = `head -n 1 #{path}`
-      run_step "Dropping privided header" do
+      OutputUtilities.run_step "Dropping privided header" do
         `sed '1d' -i #{path}`
       end
 
@@ -51,7 +50,7 @@ module AviationData
     end
 
     def format_dates(path)
-      run_step "Formatting dates for native conversion" do
+      OutputUtilities.run_step "Formatting dates for native conversion" do
         `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
         # `sed -r -i "s/,([0-9]{2})([0-9]{4})/,\\1 01 \\2/g" #{path}`
       end
@@ -66,7 +65,7 @@ module AviationData
       json_path = "#{path.split('.').first}.json"
       encoder = Yajl::Encoder.new
 
-      run_step "Converting to JSON" do
+      OutputUtilities.run_step "Converting to JSON" do
         File.open(json_path, 'w') do |f|
           CSV.foreach(path) do |row|
             hash = hash_from_row(fields, row)
