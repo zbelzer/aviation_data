@@ -1,3 +1,2 @@
-class Airman
-  include MongoMapper::Document
+class Airman < ActiveRecord::Base
 end

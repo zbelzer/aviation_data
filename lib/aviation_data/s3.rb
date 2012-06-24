@@ -1,6 +1,6 @@
 require 'right_aws'
 
-module Faa
+module AviationData
   class S3
     BUCKET = 'data.copilot.aero'
     KEYNAME = 'faa'
@@ -54,13 +54,13 @@ module Faa
     private
 
     def self.s3
-      @s3 ||= RightAws::S3Interface.new(Copilot[:aws_access_key_id], Copilot[:aws_secret_access_key], {:multi_thread => true})
+      @s3 ||= RightAws::S3Interface.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'], {:multi_thread => true})
     end
 
     def self.files
-      s3.list_bucket(BUCKET).inject([]) do |files, file|
+      s3.list_bucket(BUCKET, :prefix => KEYNAME).inject([]) do |files, file|
         key = file[:key]
-        files << {:key => key, :name => File.basename(key)} if key.split('/')[0] == 'faa'
+        files << {:key => key, :name => File.basename(key)}
         files
       end
     end

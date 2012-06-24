@@ -1,13 +1,4 @@
-class Airport
-  include MongoMapper::Document
-
-  key :icao, String
-  key :iata, String
-  key :longitude, Float
-  key :latitude, Float
-
-  ensure_index [[:icao, 1], [:iata, 1]]
-  
+class Airport < ActiveRecord::Base
   def self.make_coord_global(type, row)
     dir = row["#{type}_dir"]
     dir = dir == "U" ? "W" : dir

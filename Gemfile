@@ -5,6 +5,10 @@ gem 'rails', '3.1.3'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
+gem 'pg'
+gem 'power_enum'
+gem 'pg_power', :git => 'git@github.com:AutoCash/pg_power'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -18,6 +22,7 @@ gem 'mongo_mapper'
 gem 'bson_ext'
 gem 'yajl-ruby'
 gem 'rubyzip2', :require => 'zip/zipfilesystem'
+gem 'parallel'
 
 gem 'right_aws'
 

@@ -1,6 +1,6 @@
 module AviationData
   module ImportUtilities
-    def self.import_into_mongo(database, collection, path, fields)
+    def self.import(database, collection, path, fields)
       OutputUtilities.run_step "Importing data into MongoDB" do
         command = "mongoimport -d #{database} -c #{collection} --file #{path} -f #{fields.join(',')} --ignoreBlanks --drop --stopOnError"
         puts command

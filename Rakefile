@@ -5,3 +5,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 AviationData::Application.load_tasks
+
+namespace :db do
+  task :rebuild => ['db:drop', 'db:create', 'db:migrate', 'db:seed']
+end

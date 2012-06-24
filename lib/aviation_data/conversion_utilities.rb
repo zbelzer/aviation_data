@@ -5,8 +5,8 @@ module AviationData
   module ConversionUtilities
     extend self
 
-    def convert_to_json(original_path, fields)
-      puts "Convertng #{original_path} to JSON"
+    def prepare_for_import(original_path, fields)
+      puts "Preparing #{original_path} for import"
 
       path = "#{original_path}.working"
       FileUtils.cp(original_path, path)
@@ -16,9 +16,9 @@ module AviationData
       # prepend_n_number(path)
       escape_quotes(path)
       format_dates(path)
-      # puts "Found header #{header}"
       
-      csv_to_json(path, fields)
+      # csv_to_json(path, fields)
+      path
     end
 
     def escape_quotes(path)
@@ -36,13 +36,14 @@ module AviationData
     def compress_whitespace(path)
       OutputUtilities.run_step "Compressing whitespace" do
         `sed -r -i "s/\s+,/,/g" #{path}`
-        `sed -r -i "s/,\r//g" #{path}`
+        `sed -r -i "s/(,\r|\032)//g" #{path}`
+        `sed -i 's/,\\\\\,/,,/g' #{path}`
       end
     end
 
     def extract_header(path)
       header = `head -n 1 #{path}`
-      OutputUtilities.run_step "Dropping privided header" do
+      OutputUtilities.run_step "Dropping provided header" do
         `sed '1d' -i #{path}`
       end
 
