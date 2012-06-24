@@ -1,0 +1,15 @@
+def benchmark(source, sink)
+  source_total = source.count
+  counts = []
+  
+  3.times do 
+    total = sink.count
+    sleep 1
+    count = sink.count
+    counts << count - total
+  end
+
+  average = counts.sum / counts.size.to_f
+
+  puts "It will take #{source_total / average} seconds"
+end
