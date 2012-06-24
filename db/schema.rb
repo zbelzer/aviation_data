@@ -11,8 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614021429) do
+ActiveRecord::Schema.define(:version => 20120624204300) do
 
+
+  create_table "aircraft_categories", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "aircraft_categories", ["name"], :name => "index_aircraft_categories_on_name", :unique => true
+
+  create_table "aircraft_engine_types", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "aircraft_engine_types", ["name"], :name => "index_aircraft_engine_types_on_name", :unique => true
 
   create_table "aircraft_reference", :force => true do |t|
     t.string  "aircraft_model_code"
@@ -28,11 +42,15 @@ ActiveRecord::Schema.define(:version => 20120614021429) do
     t.integer "cruising_speed"
   end
 
+  create_table "aircraft_types", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "aircraft_types", ["name"], :name => "index_aircraft_types_on_name", :unique => true
+
   create_table "cities", :force => true do |t|
-    t.string   "name",        :null => false
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "name", :null => false
   end
 
   add_index "cities", ["name"], :name => "index_cities_on_name", :unique => true
@@ -51,7 +69,13 @@ ActiveRecord::Schema.define(:version => 20120614021429) do
     t.date    "ended_at"
   end
 
-  add_index "identifiers", ["code"], :name => "index_identifiers_on_code"
+  add_index "identifiers", ["code"], :name => "index_identifiers_on_code", :unique => true
+
+  create_table "manufacturer_names", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  add_index "manufacturer_names", ["name"], :name => "index_manufacturer_names_on_name", :unique => true
 
   create_table "master", :force => true do |t|
     t.string  "identifier"
@@ -90,13 +114,39 @@ ActiveRecord::Schema.define(:version => 20120614021429) do
   add_index "master", ["identifier"], :name => "index_master_on_identifier"
   add_index "master", ["serial_number"], :name => "index_master_on_serial_number"
 
+  create_table "model_names", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "model_names", ["name"], :name => "index_model_names_on_name", :unique => true
+
+  create_table "models", :force => true do |t|
+    t.string  "code"
+    t.integer "manufacturer_id"
+    t.integer "model_id"
+    t.string  "type_aircraft"
+    t.string  "type_engine"
+    t.string  "aircraft_category_code"
+    t.string  "builder_certification_code"
+    t.integer "engines"
+    t.integer "seats"
+    t.integer "weight_id"
+    t.integer "cruising_speed"
+  end
+
   create_table "states", :force => true do |t|
-    t.string   "name",        :null => false
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "name",        :null => false
+    t.string "description"
   end
 
   add_index "states", ["name"], :name => "index_states_on_name", :unique => true
+
+  create_table "weights", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "weights", ["name"], :name => "index_weights_on_name", :unique => true
 
 end
