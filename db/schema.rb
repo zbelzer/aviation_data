@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121027212728) do
+ActiveRecord::Schema.define(:version => 20121028000002) do
 
 
   create_table "aircraft_categories", :force => true do |t|
@@ -54,6 +54,10 @@ ActiveRecord::Schema.define(:version => 20121027212728) do
     t.integer "model_id"
   end
 
+  add_index "aircrafts", ["identifier_id", "model_id"], :name => "index_aircrafts_on_identifier_id_and_model_id", :unique => true
+  add_index "aircrafts", ["identifier_id"], :name => "index_aircrafts_on_identifier_id"
+  add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
+
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
   end
@@ -75,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20121027212728) do
   end
 
   add_index "identifiers", ["code"], :name => "index_identifiers_on_code", :unique => true
+  add_index "identifiers", ["identifier_type_id"], :name => "index_identifiers_on_identifier_type_id"
 
   create_table "manufacturer_names", :force => true do |t|
     t.string "name", :null => false
@@ -128,7 +133,7 @@ ActiveRecord::Schema.define(:version => 20121027212728) do
 
   create_table "models", :force => true do |t|
     t.string  "code"
-    t.integer "manufacturer_id"
+    t.integer "manufacturer_name_id"
     t.integer "model_name_id"
     t.integer "aircraft_type_id"
     t.integer "engine_type_id"
@@ -140,7 +145,10 @@ ActiveRecord::Schema.define(:version => 20121027212728) do
     t.integer "cruising_speed"
   end
 
+  add_index "models", ["aircraft_type_id"], :name => "index_models_on_aircraft_type_id"
   add_index "models", ["code"], :name => "index_models_on_code"
+  add_index "models", ["manufacturer_name_id"], :name => "index_models_on_manufacturer_name_id"
+  add_index "models", ["model_name_id"], :name => "index_models_on_model_name_id"
 
   create_table "states", :force => true do |t|
     t.string "name",        :null => false
@@ -155,5 +163,14 @@ ActiveRecord::Schema.define(:version => 20121027212728) do
   end
 
   add_index "weights", ["name"], :name => "index_weights_on_name", :unique => true
+
+  add_foreign_key "aircrafts", "public.identifiers", :name => "aircrafts_identifier_id_fk", :column => "identifier_id", :exclude_index => true
+  add_foreign_key "aircrafts", "public.models", :name => "aircrafts_model_id_fk", :column => "model_id", :exclude_index => true
+
+  add_foreign_key "identifiers", "public.identifier_types", :name => "identifiers_identifier_type_id_fk", :column => "identifier_type_id", :exclude_index => true
+
+  add_foreign_key "models", "public.aircraft_types", :name => "models_aircraft_type_id_fk", :column => "aircraft_type_id", :exclude_index => true
+  add_foreign_key "models", "public.manufacturer_names", :name => "models_manufacturer_name_id_fk", :column => "manufacturer_name_id", :exclude_index => true
+  add_foreign_key "models", "public.model_names", :name => "models_model_name_id_fk", :column => "model_name_id", :exclude_index => true
 
 end

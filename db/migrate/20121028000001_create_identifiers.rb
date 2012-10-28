@@ -8,5 +8,7 @@ class CreateIdentifiers < ActiveRecord::Migration
     end
 
     add_index :identifiers, :code, :unique => true
+
+    add_foreign_key :identifiers, :identifier_types
   end
 end

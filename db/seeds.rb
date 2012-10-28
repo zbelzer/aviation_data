@@ -23,7 +23,7 @@ def seed(clazz, filename)
     puts "Importing #{filename} as Text"
 
     File.foreach(text_path).each do |line|
-      m = clazz.new(:name => line)
+      m = clazz.new(:name => line.chomp)
       m.save(:validate => false)
     end
   end
