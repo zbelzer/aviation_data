@@ -7,7 +7,7 @@ gem 'rails', '3.1.3'
 
 gem 'pg'
 gem 'power_enum'
-gem 'pg_power', :git => 'git@github.com:AutoCash/pg_power'
+gem 'pg_power'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -18,13 +18,12 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem 'mongo_mapper'
-gem 'bson_ext'
 gem 'yajl-ruby'
 gem 'rubyzip2', :require => 'zip/zipfilesystem'
 gem 'parallel'
 
 gem 'right_aws'
+gem 'activerecord-import'
 
 group :test do
   # Pretty printed test output

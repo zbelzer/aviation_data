@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120624204300) do
+ActiveRecord::Schema.define(:version => 20121027212728) do
 
 
   create_table "aircraft_categories", :force => true do |t|
@@ -29,11 +29,11 @@ ActiveRecord::Schema.define(:version => 20120624204300) do
   add_index "aircraft_engine_types", ["name"], :name => "index_aircraft_engine_types_on_name", :unique => true
 
   create_table "aircraft_reference", :force => true do |t|
-    t.string  "aircraft_model_code"
-    t.string  "manufacturer"
+    t.string  "code"
+    t.string  "manufacturer_name"
     t.string  "model_name"
-    t.string  "type_aircraft"
-    t.string  "type_engine"
+    t.string  "aircraft_type"
+    t.string  "engine_type"
     t.string  "aircraft_category_code"
     t.string  "builder_certification_code"
     t.integer "engines"
@@ -48,6 +48,11 @@ ActiveRecord::Schema.define(:version => 20120624204300) do
   end
 
   add_index "aircraft_types", ["name"], :name => "index_aircraft_types_on_name", :unique => true
+
+  create_table "aircrafts", :force => true do |t|
+    t.integer "identifier_id"
+    t.integer "model_id"
+  end
 
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
@@ -124,9 +129,9 @@ ActiveRecord::Schema.define(:version => 20120624204300) do
   create_table "models", :force => true do |t|
     t.string  "code"
     t.integer "manufacturer_id"
-    t.integer "model_id"
-    t.string  "type_aircraft"
-    t.string  "type_engine"
+    t.integer "model_name_id"
+    t.integer "aircraft_type_id"
+    t.integer "engine_type_id"
     t.string  "aircraft_category_code"
     t.string  "builder_certification_code"
     t.integer "engines"
@@ -134,6 +139,8 @@ ActiveRecord::Schema.define(:version => 20120624204300) do
     t.integer "weight_id"
     t.integer "cruising_speed"
   end
+
+  add_index "models", ["code"], :name => "index_models_on_code"
 
   create_table "states", :force => true do |t|
     t.string "name",        :null => false

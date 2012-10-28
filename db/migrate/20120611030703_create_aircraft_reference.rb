@@ -1,11 +1,11 @@
 class CreateAircraftReference < ActiveRecord::Migration
   def change
     create_table :aircraft_reference do |t|
-      t.string :aircraft_model_code
-      t.string :manufacturer
+      t.string :code
+      t.string :manufacturer_name
       t.string :model_name
-      t.string :type_aircraft
-      t.string :type_engine
+      t.string :aircraft_type
+      t.string :engine_type
       t.string :aircraft_category_code
       t.string :builder_certification_code
       t.integer :engines

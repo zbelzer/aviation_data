@@ -1,0 +1,10 @@
+The system currently:
+* imports all enums as seeds
+* pulls in MASTER, ACFTREF
+* creates identifiers from MASTER
+* creates models from ACFTREF
+
+The batch runner doesn't like running after another batch runner. Likely it has
+to do with running connections being disconnected or something.
+
+rake aircraft:clear aircraft:source aircraft:identifiers aircraft:models --trace
