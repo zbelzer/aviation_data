@@ -35,9 +35,15 @@ seed(ManufacturerName, "manufacturers")
 seed(ModelName, "models")
 seed(Weight, "weights")
 
-AircraftEngineType.enumeration_model_updates_permitted = true
-AircraftEngineType::CODE_MAP.each do |code, name|
-  m = AircraftEngineType.new(:name => name)
+BuilderCertification.enumeration_model_updates_permitted = true
+BuilderCertification::CODE_MAP.each do |code, name|
+  m = BuilderCertification.new(:name => name)
+  m.save(:validate => false)
+end
+
+EngineType.enumeration_model_updates_permitted = true
+EngineType::CODE_MAP.each do |code, name|
+  m = EngineType.new(:name => name)
   m.save(:validate => false)
 end
 

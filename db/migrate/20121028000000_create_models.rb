@@ -7,9 +7,9 @@ class CreateModels < ActiveRecord::Migration
       t.integer :model_name_id
       t.integer :aircraft_type_id
       t.integer :engine_type_id
+      t.integer :aircraft_category_id
+      t.integer :builder_certification_id
 
-      t.string :aircraft_category_code
-      t.string :builder_certification_code
       t.integer :engines
       t.integer :seats
       t.integer :weight_id
@@ -21,6 +21,8 @@ class CreateModels < ActiveRecord::Migration
     add_foreign_key :models, :manufacturer_names
     add_foreign_key :models, :model_names
     add_foreign_key :models, :aircraft_types
-    # add_foreign_key :models, :engine_types
+    add_foreign_key :models, :aircraft_categories
+    add_foreign_key :models, :builder_certifications
+    add_foreign_key :models, :engine_types
   end
 end

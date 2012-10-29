@@ -28,7 +28,7 @@ module BatchRunner
 
     Thread.abort_on_exception = true
 
-    Parallel.map(batches, :preserve_results => false, :in_processes => 4) do |limit, offset|
+    Parallel.map(batches, :preserve_results => false, :in_processes => 8) do |limit, offset|
       ActiveRecord::Base.connection.reconnect!
       yield(limit, offset)
     end

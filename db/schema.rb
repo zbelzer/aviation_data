@@ -21,13 +21,6 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
 
   add_index "aircraft_categories", ["name"], :name => "index_aircraft_categories_on_name", :unique => true
 
-  create_table "aircraft_engine_types", :force => true do |t|
-    t.string "name",        :null => false
-    t.string "description"
-  end
-
-  add_index "aircraft_engine_types", ["name"], :name => "index_aircraft_engine_types_on_name", :unique => true
-
   create_table "aircraft_reference", :force => true do |t|
     t.string  "code"
     t.string  "manufacturer_name"
@@ -52,17 +45,33 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
   create_table "aircrafts", :force => true do |t|
     t.integer "identifier_id"
     t.integer "model_id"
+    t.integer "year_manufactured"
+    t.integer "transponder_code"
   end
 
   add_index "aircrafts", ["identifier_id", "model_id"], :name => "index_aircrafts_on_identifier_id_and_model_id", :unique => true
   add_index "aircrafts", ["identifier_id"], :name => "index_aircrafts_on_identifier_id"
   add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
 
+  create_table "builder_certifications", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "builder_certifications", ["name"], :name => "index_builder_certifications_on_name", :unique => true
+
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
   end
 
   add_index "cities", ["name"], :name => "index_cities_on_name", :unique => true
+
+  create_table "engine_types", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "engine_types", ["name"], :name => "index_engine_types_on_name", :unique => true
 
   create_table "identifier_types", :force => true do |t|
     t.string "name",        :null => false
@@ -137,16 +146,19 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
     t.integer "model_name_id"
     t.integer "aircraft_type_id"
     t.integer "engine_type_id"
-    t.string  "aircraft_category_code"
-    t.string  "builder_certification_code"
+    t.integer "aircraft_category_id"
+    t.integer "builder_certification_id"
     t.integer "engines"
     t.integer "seats"
     t.integer "weight_id"
     t.integer "cruising_speed"
   end
 
+  add_index "models", ["aircraft_category_id"], :name => "index_models_on_aircraft_category_id"
   add_index "models", ["aircraft_type_id"], :name => "index_models_on_aircraft_type_id"
+  add_index "models", ["builder_certification_id"], :name => "index_models_on_builder_certification_id"
   add_index "models", ["code"], :name => "index_models_on_code"
+  add_index "models", ["engine_type_id"], :name => "index_models_on_engine_type_id"
   add_index "models", ["manufacturer_name_id"], :name => "index_models_on_manufacturer_name_id"
   add_index "models", ["model_name_id"], :name => "index_models_on_model_name_id"
 
@@ -169,7 +181,10 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
 
   add_foreign_key "identifiers", "public.identifier_types", :name => "identifiers_identifier_type_id_fk", :column => "identifier_type_id", :exclude_index => true
 
+  add_foreign_key "models", "public.aircraft_categories", :name => "models_aircraft_category_id_fk", :column => "aircraft_category_id", :exclude_index => true
   add_foreign_key "models", "public.aircraft_types", :name => "models_aircraft_type_id_fk", :column => "aircraft_type_id", :exclude_index => true
+  add_foreign_key "models", "public.builder_certifications", :name => "models_builder_certification_id_fk", :column => "builder_certification_id", :exclude_index => true
+  add_foreign_key "models", "public.engine_types", :name => "models_engine_type_id_fk", :column => "engine_type_id", :exclude_index => true
   add_foreign_key "models", "public.manufacturer_names", :name => "models_manufacturer_name_id_fk", :column => "manufacturer_name_id", :exclude_index => true
   add_foreign_key "models", "public.model_names", :name => "models_model_name_id_fk", :column => "model_name_id", :exclude_index => true
 
