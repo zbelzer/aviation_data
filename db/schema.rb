@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
     t.integer "model_id"
     t.integer "year_manufactured"
     t.integer "transponder_code"
+    t.date    "as_of"
   end
 
   add_index "aircrafts", ["identifier_id", "model_id"], :name => "index_aircrafts_on_identifier_id_and_model_id", :unique => true

@@ -10,7 +10,9 @@
 # The batch runner doesn't like running after another batch runner. Likely it has
 # to do with running connections being disconnected or something.
 
-rake db:rebuild
-rake aircraft:clear aircraft:source aircraft:identifiers --trace
-rake aircraft:models --trace
-rake aircraft:aircrafts --trace
+# rake db:rebuild
+# rake aircraft:clear
+rake aircraft:source[AR022009] --trace
+rake aircraft:identifiers[AR022009] --trace
+rake aircraft:models[AR022009] --trace
+rake aircraft:aircrafts[AR022009] --trace

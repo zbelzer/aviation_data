@@ -15,20 +15,21 @@ namespace :aircraft do
     Aircraft.delete_all
   end
 
-  task :import => :environment do
-    Rake::Task['aircraft:clear'].invoke
-    Rake::Task['aircraft:source'].invoke
-    Rake::Task['aircraft:identifiers'].invoke
-    Rake::Task['aircraft:models'].invoke
+  task :import, [:file] => :environment do |t, args|
+    Rake::Task['aircraft:source'].invoke(args[:file])
+    Rake::Task['aircraft:identifiers'].invoke(args[:file])
+    Rake::Task['aircraft:models'].invoke(args[:file])
   end
 
-  task :source => :environment do
+  task :source, [:file] => :environment do |t, args|
     AviationData::AIRCRAFT_TABLE_MAP.each do |type, collection|
       puts
       puts "Importing #{type.upcase}"
 
+      file = args[:file]
+
       fields = AviationData::HEADERS[type]
-      original_path = Rails.root.join("db/data/aircraft/AR012009/#{type.upcase}")
+      original_path = Rails.root.join("db/data/aircraft/#{file}/#{type.upcase}")
 
       prepared_path = AviationData::ConversionUtilities.prepare_for_import(original_path, fields)
       AviationData::ImportUtilities.import(AviationData::DATABASE, collection, prepared_path, fields)
@@ -37,7 +38,7 @@ namespace :aircraft do
   end
 
   desc "Imports identifiers from the MASTER file"
-  task :identifiers => :environment do
+  task :identifiers, [:file] => :environment do |t, args|
     puts
     puts "Importing identifiers from MASTER"
 
@@ -48,7 +49,11 @@ namespace :aircraft do
 
       Master.order(:id).limit(limit).offset(offset).all.each do |record|
         unless Identifier.where(:code => record.identifier).exists?
-          identifiers << Identifier.new(:identifier_type => IdentifierType[:n_number], :code => record.identifier)
+
+          identifiers << Identifier.new(
+            :identifier_type => IdentifierType[:n_number],
+            :code            => record.identifier
+          )
         end
       end
 
@@ -58,7 +63,7 @@ namespace :aircraft do
   end
 
   desc "Imports models from the ACFTREF file"
-  task :models => :environment do
+  task :models, [:file] => :environment do |t, args|
     puts
     puts "Importing models from ACFTREF"
 
@@ -69,10 +74,10 @@ namespace :aircraft do
 
       AircraftReference.order(:id).limit(limit).offset(offset).all.each do |record|
         unless Model.where(:code => record.code).exists?
-          aircraft_type_name = AircraftType::CODE_MAP[record.aircraft_type]
-          aircraft_category_name = AircraftCategory::CODE_MAP[record.aircraft_category_code]
+          aircraft_type_name         = AircraftType::CODE_MAP[record.aircraft_type]
+          aircraft_category_name     = AircraftCategory::CODE_MAP[record.aircraft_category_code]
           builder_certification_name = BuilderCertification::CODE_MAP[record.builder_certification_code]
-          engine_type_name = EngineType::CODE_MAP[record.engine_type]
+          engine_type_name           = EngineType::CODE_MAP[record.engine_type]
 
           begin
             models << Model.new(
@@ -105,9 +110,13 @@ namespace :aircraft do
   end
 
   desc "Imports aircrafts from the MASTER file"
-  task :aircrafts => :environment do
+  task :aircrafts, [:file] => :environment do |t, args|
     puts
     puts "Importing aircrafts from MASTER"
+
+    file = args[:file]
+    file =~ /AR(\d{2})(\d{4})/
+    import_date = Date.new($2.to_i, $1.to_i)
 
     BatchRunner.run(Master) do |limit, offset|
       puts "Thread started with limit #{limit} offset #{offset}"
@@ -123,7 +132,8 @@ namespace :aircraft do
             :identifier_id     => ident.id,
             :model_id          => model.id,
             :year_manufactured => record.year_manufactured,
-            :transponder_code  => record.transponder_code
+            :transponder_code  => record.transponder_code,
+            :as_of             => import_date
           )
         rescue => e
           puts "Could not create aircraft for"

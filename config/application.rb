@@ -8,6 +8,8 @@ require "active_resource/railtie"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
+require File.expand_path("../../lib/core", __FILE__)
+
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
   Bundler.require(*Rails.groups(:assets => %w(development test)))
@@ -28,5 +30,21 @@ module AviationData
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    initializer 'core.load_engine' do
+      ActiveSupport.on_load :active_record do
+        ActiveRecord::Base.class_eval do
+          include Core::Aggregatable
+          include Core::HasEnumeratedSti
+          include Core::Trackable
+          include Core::AliasAssociation
+          include Core::Behaviors
+        end
+      end
+
+      ActiveSupport::Inflector.inflections do |inflector|
+        inflector.plural /^(\w+_info)$/, '\1'
+      end
+    end
   end
 end
