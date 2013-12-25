@@ -1,0 +1,9 @@
+glider, Glider
+balloon, Baloon
+blimp, Blimp
+fixed_wing_single_engine, Fixed Wing Single Engine
+fixed_wing_multi_engine, Fixed Wing Multi Engine
+rotorcraft, Rotorcraft
+weight_shift_control, Weight Shift Control
+powered_parachute, Powered Parachute
+gyroplane, Gyroplane

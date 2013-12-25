@@ -5,7 +5,9 @@ def seed(clazz, filename)
   csv_path = File.join(SEEDS_PATH, "#{filename}.csv")
   text_path = File.join(SEEDS_PATH, "#{filename}.txt")
 
-  clazz.enumeration_model_updates_permitted = true
+  if clazz.respond_to?(:enumeration_model_updates_permitted?)
+    clazz.enumeration_model_updates_permitted = true
+  end
 
   if File.exists?(sql_path)
     puts "Importing #{filename} as SQL"
@@ -16,7 +18,7 @@ def seed(clazz, filename)
     puts "Importing #{filename} as CSV"
 
     CSV.foreach(csv_path) do |row|
-      m = clazz.new(:name => row[0], :description => row[1])
+      m = clazz.new(:name => row[0].strip, :description => row[1].strip)
       m.save(:validate => false)
     end
   else
@@ -30,31 +32,12 @@ def seed(clazz, filename)
 end
 
 seed(State, "states")
+seed(Country, "countries")
 seed(IdentifierType, "identifier_types")
-seed(ManufacturerName, "manufacturers")
-seed(ModelName, "models")
+seed(ManufacturerName, "manufacturer_names")
+seed(ModelName, "model_names")
 seed(Weight, "weights")
-
-BuilderCertification.enumeration_model_updates_permitted = true
-BuilderCertification::CODE_MAP.each do |code, name|
-  m = BuilderCertification.new(:name => name)
-  m.save(:validate => false)
-end
-
-EngineType.enumeration_model_updates_permitted = true
-EngineType::CODE_MAP.each do |code, name|
-  m = EngineType.new(:name => name)
-  m.save(:validate => false)
-end
-
-AircraftType.enumeration_model_updates_permitted = true
-AircraftType::CODE_MAP.each do |code, name|
-  m = AircraftType.new(:name => name)
-  m.save(:validate => false)
-end
-
-AircraftCategory.enumeration_model_updates_permitted = true
-AircraftCategory::CODE_MAP.each do |code, name|
-  m = AircraftCategory.new(:name => name.to_s)
-  m.save(:validate => false)
-end
+seed(BuilderCertification, "builder_certifications")
+seed(EngineType, "engine_types")
+seed(AircraftType, "aircraft_types")
+seed(AircraftCategory, "aircraft_categories")

@@ -23,7 +23,7 @@ module AviationData
 
     def escape_quotes(path)
       OutputUtilities.run_step "Escaping quotes" do
-        `sed -r -i "s/\\"/'/g" #{path}`
+        `sed -r -i "s/\\"/\\\"/g" #{path}`
       end
     end
 

@@ -4,10 +4,10 @@ class CreateAircraftReference < ActiveRecord::Migration
       t.string :code
       t.string :manufacturer_name
       t.string :model_name
-      t.string :aircraft_type
-      t.string :engine_type
-      t.string :aircraft_category_code
-      t.string :builder_certification_code
+      t.integer :aircraft_type_id
+      t.integer :engine_type_id
+      t.integer :aircraft_category_id
+      t.integer :builder_certification_id
       t.integer :engines
       t.integer :seats
       t.string :weight

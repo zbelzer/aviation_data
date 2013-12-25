@@ -51,8 +51,8 @@ namespace :aircraft do
         unless Identifier.where(:code => record.identifier).exists?
 
           identifiers << Identifier.new(
-            :identifier_type => IdentifierType[:n_number],
-            :code            => record.identifier
+            :country_id => IdentifierType[:n_number],
+            :code       => record.identifier
           )
         end
       end
@@ -74,21 +74,18 @@ namespace :aircraft do
 
       AircraftReference.order(:id).limit(limit).offset(offset).all.each do |record|
         unless Model.where(:code => record.code).exists?
-          aircraft_type_name         = AircraftType::CODE_MAP[record.aircraft_type]
-          aircraft_category_name     = AircraftCategory::CODE_MAP[record.aircraft_category_code]
-          builder_certification_name = BuilderCertification::CODE_MAP[record.builder_certification_code]
-          engine_type_name           = EngineType::CODE_MAP[record.engine_type]
 
           begin
             models << Model.new(
-              :code                      => record.code,
+              :code                     => record.code,
+
+              :aircraft_type_id         => record.aircraft_type_id,
+              :aircraft_category_id     => record.aircraft_category_id,
+              :builder_certification_id => record.builder_certification_id,
+              :engine_type_id           => record.engine_type_id,
 
               :manufacturer_name_id      => ManufacturerName[record.manufacturer_name].id,
               :model_name_id             => ModelName[record.model_name].id,
-              :aircraft_type_id          => AircraftType[aircraft_type_name].id,
-              :aircraft_category_id      => AircraftCategory[aircraft_category_name].id,
-              :engine_type_id            => EngineType[engine_type_name].id,
-              :builder_certification_id  => BuilderCertification[builder_certification_name].id,
               :weight_id                 => Weight[record.weight].id,
 
               :engines                   => record.engines,
@@ -99,7 +96,7 @@ namespace :aircraft do
             puts "Failed to import:"
             puts record.attributes.inspect
             puts e.message
-            # puts e.backtrace.join("\n")
+            puts e.backtrace.join("\n")
           end
         end 
       end

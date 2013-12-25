@@ -1,0 +1,12 @@
+None
+Reciprocating
+Turbo-prop
+Turbo-shaft
+Turbo-jet
+Turbo-fan
+Ramjet
+2 Cycle
+4 Cycle
+Unknown
+Electric
+Rotary

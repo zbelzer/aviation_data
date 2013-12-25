@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
     t.string  "code"
     t.string  "manufacturer_name"
     t.string  "model_name"
-    t.string  "aircraft_type"
-    t.string  "engine_type"
-    t.string  "aircraft_category_code"
-    t.string  "builder_certification_code"
+    t.integer "aircraft_type_id"
+    t.integer "engine_type_id"
+    t.integer "aircraft_category_id"
+    t.integer "builder_certification_id"
     t.integer "engines"
     t.integer "seats"
     t.string  "weight"
@@ -66,6 +66,13 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
   end
 
   add_index "cities", ["name"], :name => "index_cities_on_name", :unique => true
+
+  create_table "countries", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
   create_table "engine_types", :force => true do |t|
     t.string "name",        :null => false
