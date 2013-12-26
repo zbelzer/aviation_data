@@ -5,7 +5,7 @@ def seed(clazz, filename)
   csv_path = File.join(SEEDS_PATH, "#{filename}.csv")
   text_path = File.join(SEEDS_PATH, "#{filename}.txt")
 
-  if clazz.respond_to?(:enumeration_model_updates_permitted?)
+  if clazz.respond_to?(:enumeration_model_updates_permitted=)
     clazz.enumeration_model_updates_permitted = true
   end
 
@@ -24,8 +24,9 @@ def seed(clazz, filename)
   else
     puts "Importing #{filename} as Text"
 
-    File.foreach(text_path).each do |line|
+    File.foreach(text_path).each_with_index do |line, index|
       m = clazz.new(:name => line.chomp)
+      m.id = index
       m.save(:validate => false)
     end
   end

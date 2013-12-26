@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+  echo "A table name must be supplied"
+else
+  echo "Exporting table $1 to db/seeds/$1.sql"
+  pg_dump --inserts -a -F p -t $1 -f db/seeds/$1.sql aviation_data_development
+fi

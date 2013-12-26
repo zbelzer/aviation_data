@@ -51,8 +51,8 @@ namespace :aircraft do
         unless Identifier.where(:code => record.identifier).exists?
 
           identifiers << Identifier.new(
-            :country_id => IdentifierType[:n_number],
-            :code       => record.identifier
+            :identifier_type_id => IdentifierType[:n_number],
+            :code               => record.identifier
           )
         end
       end
