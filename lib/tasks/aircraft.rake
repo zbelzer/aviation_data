@@ -23,7 +23,6 @@ namespace :aircraft do
 
   task :source, [:file] => :environment do |t, args|
     AviationData::AIRCRAFT_TABLE_MAP.each do |type, collection|
-      puts
       puts "Importing #{type.upcase}"
 
       file = args[:file]
@@ -43,7 +42,7 @@ namespace :aircraft do
     puts "Importing identifiers from MASTER"
 
     BatchRunner.run(Master) do |limit, offset|
-      puts "Thread started with limit #{limit} offset #{offset}"
+      print "\nThread started with limit #{limit} offset #{offset}\n"
 
       identifiers = []
 
@@ -58,7 +57,7 @@ namespace :aircraft do
       end
 
       Identifier.import identifiers
-      puts "Imported #{identifiers.size} new identifiers"
+      print "\nImported #{identifiers.size} new identifiers\n"
     end
   end
 
@@ -68,7 +67,7 @@ namespace :aircraft do
     puts "Importing models from ACFTREF"
 
     BatchRunner.run(AircraftReference) do |limit, offset|
-      puts "Thread started with limit #{limit} offset #{offset}"
+      print "\nThread started with limit #{limit} offset #{offset}\n"
 
       models = []
 
@@ -102,7 +101,7 @@ namespace :aircraft do
       end
 
       Model.import models
-      puts "Imported #{models.size} new models"
+      print "\nImported #{models.size} new models\n"
     end
   end
 
@@ -116,7 +115,7 @@ namespace :aircraft do
     import_date = Date.new($2.to_i, $1.to_i)
 
     BatchRunner.run(Master) do |limit, offset|
-      puts "Thread started with limit #{limit} offset #{offset}"
+      print "\nThread started with limit #{limit} offset #{offset}\n"
 
       aircrafts = []
 
@@ -136,12 +135,12 @@ namespace :aircraft do
           puts "Could not create aircraft for"
           puts record.attributes
           puts e.message
-          # puts e.backtrace.join("\n")
+          puts e.backtrace.join("\n")
         end
       end
 
       Aircraft.import aircrafts
-      puts "Imported #{aircrafts.size} new aircrafts"
+      print "\nImported #{aircrafts.size} new aircrafts\n"
     end
   end
 

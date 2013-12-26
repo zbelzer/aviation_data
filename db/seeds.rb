@@ -17,9 +17,12 @@ def seed(clazz, filename)
   elsif File.exists?(csv_path)
     puts "Importing #{filename} as CSV"
 
+    index = 0
     CSV.foreach(csv_path) do |row|
       m = clazz.new(:name => row[0].strip, :description => row[1].strip)
+      m.id = index
       m.save(:validate => false)
+      index += 1
     end
   else
     puts "Importing #{filename} as Text"

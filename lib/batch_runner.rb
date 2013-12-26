@@ -1,4 +1,6 @@
 module BatchRunner
+  PROCESS_COUNT = 6
+
   def self.run(clazz)
     batches = []
 
@@ -28,7 +30,7 @@ module BatchRunner
 
     Thread.abort_on_exception = true
 
-    Parallel.map(batches, :preserve_results => false, :in_processes => 8) do |limit, offset|
+    Parallel.map(batches, :preserve_results => false, :in_processes => PROCESS_COUNT) do |limit, offset|
       ActiveRecord::Base.connection.reconnect!
       yield(limit, offset)
     end
