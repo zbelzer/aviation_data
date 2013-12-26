@@ -1,17 +1,17 @@
 module BatchRunner
   PROCESS_COUNT = 6
 
-  def self.run(clazz)
+  def self.run(name, scope)
     batches = []
 
-    total = clazz.count
+    total = scope.count
     running_total = total
-    batch_size = total / 8
+    batch_size = total < PROCESS_COUNT ? total : (total / PROCESS_COUNT)
 
     limit = 0
     offset = 0
 
-    puts "Importing #{clazz.name} in batches"
+    puts "Importing #{name} in batches"
     puts " -- total records: #{total}"
     puts " -- batch size: #{batch_size}"
 
@@ -29,6 +29,9 @@ module BatchRunner
     end
 
     Thread.abort_on_exception = true
+
+    limit = nil if limit.zero?
+    offset = nil if offset.zero?
 
     Parallel.map(batches, :preserve_results => false, :in_processes => PROCESS_COUNT) do |limit, offset|
       ActiveRecord::Base.connection.reconnect!

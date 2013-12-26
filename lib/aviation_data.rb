@@ -19,8 +19,8 @@ module AviationData
   }
 
   AIRCRAFT_TABLE_MAP = [
-    ['MASTER', 'master'],
-    ['ACFTREF', 'aircraft_reference'],
+    ['MASTER', 'master', 'Master'],
+    ['ACFTREF', 'aircraft_reference', 'AircraftReference'],
     # ['DEREG', 'deregistered'],
     # ['DEALER', 'dealer'],
     # ['ENGINE', 'engine'],

@@ -91,8 +91,6 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
   create_table "identifiers", :force => true do |t|
     t.integer "identifier_type_id"
     t.string  "code"
-    t.date    "started_at"
-    t.date    "ended_at"
   end
 
   add_index "identifiers", ["code"], :name => "index_identifiers_on_code", :unique => true

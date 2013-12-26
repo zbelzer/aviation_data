@@ -22,7 +22,11 @@ namespace :aircraft do
   end
 
   task :source, [:file] => :environment do |t, args|
-    AviationData::AIRCRAFT_TABLE_MAP.each do |type, collection|
+    AviationData::AIRCRAFT_TABLE_MAP.each do |type, collection, table_name|
+      table = table_name.constantize
+      table.delete_all
+
+      puts
       puts "Importing #{type.upcase}"
 
       file = args[:file]
@@ -41,23 +45,24 @@ namespace :aircraft do
     puts
     puts "Importing identifiers from MASTER"
 
-    BatchRunner.run(Master) do |limit, offset|
-      print "\nThread started with limit #{limit} offset #{offset}\n"
+    scope = Master.
+      joins("LEFT JOIN identifiers ON master.identifier = identifiers.code").
+      where(:identifiers => {:code => nil})
+
+    BatchRunner.run(Master, scope) do |limit, offset|
+      print "Batch started with limit #{limit} offset #{offset}\n"
 
       identifiers = []
 
-      Master.order(:id).limit(limit).offset(offset).all.each do |record|
-        unless Identifier.where(:code => record.identifier).exists?
-
-          identifiers << Identifier.new(
-            :identifier_type_id => IdentifierType[:n_number],
-            :code               => record.identifier
-          )
-        end
+      scope.order(:id).limit(limit).offset(offset).all.each do |record|
+        identifiers << Identifier.new(
+          :identifier_type_id => IdentifierType[:n_number],
+          :code               => record.identifier
+        )
       end
 
       Identifier.import identifiers
-      print "\nImported #{identifiers.size} new identifiers\n"
+      print "Imported #{identifiers.size} new identifiers\n"
     end
   end
 
@@ -66,42 +71,43 @@ namespace :aircraft do
     puts
     puts "Importing models from ACFTREF"
 
-    BatchRunner.run(AircraftReference) do |limit, offset|
-      print "\nThread started with limit #{limit} offset #{offset}\n"
+    scope = AircraftReference.
+      joins("LEFT JOIN models ON aircraft_reference.code = models.code").
+      where(:models => {:code => nil})
+
+    BatchRunner.run(AircraftReference, scope) do |limit, offset|
+      print "Batch started with limit #{limit} offset #{offset}\n"
 
       models = []
 
-      AircraftReference.order(:id).limit(limit).offset(offset).all.each do |record|
-        unless Model.where(:code => record.code).exists?
+      scope.order(:id).limit(limit).offset(offset).all.each do |record|
+        begin
+          models << Model.new(
+            :code                     => record.code,
 
-          begin
-            models << Model.new(
-              :code                     => record.code,
+            :aircraft_type_id         => record.aircraft_type_id,
+            :aircraft_category_id     => record.aircraft_category_id,
+            :builder_certification_id => record.builder_certification_id,
+            :engine_type_id           => record.engine_type_id,
 
-              :aircraft_type_id         => record.aircraft_type_id,
-              :aircraft_category_id     => record.aircraft_category_id,
-              :builder_certification_id => record.builder_certification_id,
-              :engine_type_id           => record.engine_type_id,
+            :manufacturer_name_id      => ManufacturerName[record.manufacturer_name].id,
+            :model_name_id             => ModelName[record.model_name].id,
+            :weight_id                 => Weight[record.weight].id,
 
-              :manufacturer_name_id      => ManufacturerName[record.manufacturer_name].id,
-              :model_name_id             => ModelName[record.model_name].id,
-              :weight_id                 => Weight[record.weight].id,
-
-              :engines                   => record.engines,
-              :seats                     => record.seats,
-              :cruising_speed            => record.cruising_speed
-            )
-          rescue => e
-            puts "Failed to import:"
-            puts record.attributes.inspect
-            puts e.message
-            puts e.backtrace.join("\n")
-          end
-        end 
-      end
+            :engines                   => record.engines,
+            :seats                     => record.seats,
+            :cruising_speed            => record.cruising_speed
+          )
+        rescue => e
+          puts "Failed to import:"
+          puts record.attributes.inspect
+          puts e.message
+          # puts e.backtrace.join("\n")
+        end
+      end 
 
       Model.import models
-      print "\nImported #{models.size} new models\n"
+      print "Imported #{models.size} new models\n"
     end
   end
 
@@ -114,15 +120,24 @@ namespace :aircraft do
     file =~ /AR(\d{2})(\d{4})/
     import_date = Date.new($2.to_i, $1.to_i)
 
-    BatchRunner.run(Master) do |limit, offset|
-      print "\nThread started with limit #{limit} offset #{offset}\n"
+    unique_sql = Master.
+      select("master.id").
+      joins("JOIN identifiers ON master.identifier = identifiers.code").
+      joins("JOIN models ON master.aircraft_model_code = models.code").
+      joins("LEFT JOIN aircrafts ON (aircrafts.identifier_id = identifiers.id AND aircrafts.model_id = models.id)").
+      where(:aircrafts => {:id => nil}).to_sql
+
+    scope = Master.where("id IN (#{unique_sql})")
+
+    BatchRunner.run(Master, scope) do |limit, offset|
+      print "Batch started with limit #{limit} offset #{offset}\n"
 
       aircrafts = []
 
-      Master.order(:id).limit(limit).offset(offset).all.each do |record|
+      scope.order(:id).limit(limit).offset(offset).all.each do |record|
         begin
-          ident = Identifier.where(:code => record.identifier).first
-          model = Model.where(:code => record.aircraft_model_code).first
+          ident = Identifier.find_by_code(record.identifier)
+          model = Model.find_by_code(record.aircraft_model_code)
 
           aircrafts << Aircraft.new(
             :identifier_id     => ident.id,
@@ -135,12 +150,18 @@ namespace :aircraft do
           puts "Could not create aircraft for"
           puts record.attributes
           puts e.message
-          puts e.backtrace.join("\n")
+          # puts e.backtrace.join("\n")
         end
       end
 
-      Aircraft.import aircrafts
-      print "\nImported #{aircrafts.size} new aircrafts\n"
+      begin
+        Aircraft.import aircrafts
+      rescue => e
+        print e.message + "\n"
+        print "RESCUING\n" + aircrafts.map(&:attributes).join("\n")
+      end
+
+      print "Imported #{aircrafts.size} new aircrafts\n"
     end
   end
 
