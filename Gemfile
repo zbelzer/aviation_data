@@ -19,11 +19,12 @@ end
 
 gem 'jquery-rails'
 gem 'yajl-ruby'
-gem 'rubyzip2', :require => 'zip/zipfilesystem'
+gem 'rubyzip'
 gem 'parallel'
 
 gem 'right_aws'
 gem 'activerecord-import'
+gem 'pry'
 
 group :test do
   # Pretty printed test output
