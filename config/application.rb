@@ -43,7 +43,7 @@ module AviationData
       end
 
       ActiveSupport::Inflector.inflections do |inflector|
-        inflector.plural /^(\w+_info)$/, '\1'
+        inflector.plural(/^(\w+_info)$/, '\1')
       end
     end
   end
