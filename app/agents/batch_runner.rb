@@ -39,9 +39,7 @@ module BatchRunner
 
       ActiveRecord::Base.connection.reconnect!
 
-      batch_scope = scope.limit(current_limit).offset(current_offset)
-      records = yield(batch_scope)
-      print "Imported #{records[:num_inserts]} new records\n"
+      yield scope.limit(current_limit).offset(current_offset)
     end
   end
 end

@@ -1,12 +1,8 @@
-require 'aviation_data/output_utilities'
-require 'aviation_data/conversion_utilities'
-require 'aviation_data/psql_import_utilities'
-
-module AviationData
-  DATA_DIR = Rails.root.join('db/data')
+module FaaData
+  DATA_DIR     = Rails.root.join('db/data')
   AIRCRAFT_DIR = File.join(DATA_DIR, 'aircraft')
-  AIRMEN_DIR = File.join(DATA_DIR, 'airmen')
-  AIRPORT_PATH =  File.join(DATA_DIR, 'airports')
+  AIRMEN_DIR   = File.join(DATA_DIR, 'airmen')
+  AIRPORT_PATH = File.join(DATA_DIR, 'airports')
 
   DATABASE = "aviation_data_development"
 
@@ -37,23 +33,23 @@ module AviationData
   ]
 
   def self.import_from_file(file)
-    AviationData::AIRCRAFT_TABLE_MAP.each do |type, collection, table_name|
+    FaaData::AIRCRAFT_TABLE_MAP.each do |type, collection, table_name|
       table = table_name.constantize
       table.delete_all
 
       puts
       puts "Importing #{type.upcase}"
 
-      fields = AviationData::HEADERS[type]
+      fields = FaaData::HEADERS[type]
       original_path = Rails.root.join("db/data/aircraft/#{file}/#{type.upcase}")
 
       unless File.exists?(original_path)
         original_path = Rails.root.join("db/data/aircraft/#{file}/#{type.upcase}.txt")
       end
 
-      prepared_path = AviationData::ConversionUtilities.prepare_for_import(original_path, fields)
-      AviationData::ImportUtilities.import(AviationData::DATABASE, collection, prepared_path, fields)
-      FileUtils.rm prepared_path
+      FaaData::ConversionUtilities.prepare_for_import(original_path, fields) do |prepared_path|
+        ::PsqlImportUtilities.import(DATABASE, collection, prepared_path, fields)
+      end
     end
   end
 end

@@ -1,6 +1,3 @@
-require 'aviation_data'
-require 'batch_runner'
-require 'activerecord-import'
 require 'fileutils'
 
 namespace :aircraft do
@@ -22,7 +19,7 @@ namespace :aircraft do
   end
 
   task :source, [:file] => :environment do |t, args|
-    AviationData.import_from_file(args[:file])
+    FaaData.import_from_file(args[:file])
   end
 
   desc "Imports identifiers from the MASTER file"

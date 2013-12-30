@@ -1,5 +1,3 @@
-require 'aviation_data'
-
 namespace :airports do
   desc "Clears and imports all current airport data"
   task :import => [:clear, 'import:icao', 'import:faa', 'import:global']

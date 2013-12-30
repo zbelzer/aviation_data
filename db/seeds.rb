@@ -1,3 +1,5 @@
+require 'csv'
+
 SEEDS_PATH = File.expand_path("../seeds", __FILE__)
 
 def seed(clazz, filename)

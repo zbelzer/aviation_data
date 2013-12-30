@@ -1,5 +1,3 @@
-require 'aviation_data'
-
 namespace :airmen do
   desc "Imports the releasable airmen and certificate databases"
   task :import => :environment do

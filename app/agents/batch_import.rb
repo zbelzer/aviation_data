@@ -1,3 +1,2 @@
 module BatchImport
-
 end
