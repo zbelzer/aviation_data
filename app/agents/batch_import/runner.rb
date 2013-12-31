@@ -21,14 +21,18 @@ module BatchImport::Runner
 
     batches = create_batches(batch_size, total)
 
-    Thread.abort_on_exception = true
-
     Parallel.map(batches, PARALLEL_OPTIONS) do |current_limit, current_offset|
       print "Batch started with limit #{current_limit} offset #{current_offset}\n"
 
-      scope.connection.reconnect!
+      ActiveRecord::Base.connection.reconnect!
 
       yield scope.limit(current_limit).offset(current_offset)
+    end
+
+    begin
+      ActiveRecord::Base.connection.reconnect!
+    rescue
+      ActiveRecord::Base.connection.reconnect!
     end
 
     puts "Import Complete"

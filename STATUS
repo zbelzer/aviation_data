@@ -12,7 +12,13 @@
 
 
 rake db:rebuild
+
 rake aircraft:source\[AR032008]
 rake aircraft:identifiers\[AR032008]
 rake aircraft:models\[AR032008]
 rake aircraft:aircrafts\[AR032008]
+
+rake aircraft:source\[AR042008]
+rake aircraft:identifiers\[AR042008]
+rake aircraft:models\[AR042008]
+rake aircraft:aircrafts\[AR042008]

@@ -3,7 +3,10 @@
 puts `rake db:rebuild`
  
 FaaData::Package.find.each do |package|
+  puts
+  puts "=========================="
   puts "Processing #{package.name}"
+  puts "=========================="
 
   FaaData.import_from_package(package)
 
@@ -18,5 +21,4 @@ FaaData::Package.find.each do |package|
   puts
   puts "Importing aircrafts from MASTER"
   BatchImport::Aircrafts.import_latest(package)
-  break
 end

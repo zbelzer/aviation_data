@@ -27,16 +27,7 @@ class FaaData::Package
   end
 
   def version
-    extract
-    
-    current_version = VERSION::OLD
-    @directory.each_child do |child|
-      if child.fnmatch?('*.txt')
-        current_version = VERSION::NEW
-        break
-      end
-    end
-    current_version
+    import_date > Date.new(2011, 6) ? VERSION::NEW : VERSION::OLD
   end
 
   def directory

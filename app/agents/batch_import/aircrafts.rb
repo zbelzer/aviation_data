@@ -1,7 +1,7 @@
 module BatchImport::Aircrafts
   def self.import_latest(package)
-
     BatchImport::Runner.run(Master.missing_aircraft) do |batch_scope|
+
       aircrafts = batch_scope.each_with_object([]) do |record, memo|
         if record.identifier_id.blank? ||  record.model_id.blank?
           puts "Could not create aircraft for"
