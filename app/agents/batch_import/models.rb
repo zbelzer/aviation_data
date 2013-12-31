@@ -1,8 +1,13 @@
 module BatchImport::Models
   def self.import_latest
-    BatchRunner.run(AircraftReference.missing_models) do |batch_scope|
+    ManufacturerName.enumeration_model_updates_permitted = true
+    ModelName.enumeration_model_updates_permitted = true
 
+    BatchImport::Runner.run(AircraftReference.missing_models) do |batch_scope|
       models = batch_scope.each_with_object([]) do |record, memo|
+        manufacturer_name = ManufacturerName[record.manufacturer_name] || ManufacturerName.create(:name => record.manufacturer_name)
+        model_name        = ModelName[record.model_name] || ModelName.create(:name => record.model_name)
+
         begin
           memo << Model.new(
             :code                     => record.code,
@@ -12,8 +17,8 @@ module BatchImport::Models
             :builder_certification_id => record.builder_certification_id,
             :engine_type_id           => record.engine_type_id,
 
-            :manufacturer_name_id      => ManufacturerName[record.manufacturer_name].id,
-            :model_name_id             => ModelName[record.model_name].id,
+            :manufacturer_name_id      => manufacturer_name.id,
+            :model_name_id             => model_name.id,
             :weight_id                 => Weight[record.weight].id,
 
             :engines                   => record.engines,
@@ -30,5 +35,8 @@ module BatchImport::Models
 
       Model.import(models, :validate => false)
     end
+
+    ManufacturerName.enumeration_model_updates_permitted = false
+    ModelName.enumeration_model_updates_permitted = false
   end
 end

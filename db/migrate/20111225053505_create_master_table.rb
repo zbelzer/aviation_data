@@ -31,6 +31,7 @@ class CreateMasterTable < ActiveRecord::Migration
       t.string :owner_four
       t.string :owner_five
       t.date :expiration_date
+      t.integer :unique_id
     end
 
     add_index :master, :identifier

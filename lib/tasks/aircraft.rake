@@ -19,7 +19,9 @@ namespace :aircraft do
   end
 
   task :source, [:file] => :environment do |t, args|
-    FaaData.import_from_file(args[:file])
+    path = FaaData::Package.root.join(args[:file])
+    package = FaaData::Package.new(path)
+    FaaData.import_from_package(package)
   end
 
   desc "Imports identifiers from the MASTER file"
@@ -43,7 +45,9 @@ namespace :aircraft do
     puts
     puts "Importing aircrafts from MASTER"
 
-    BatchImport::Aircrafts.import_latest(args[:file])
+    path = FaaData::Package.root.join(args[:file])
+    package = FaaData::Package.new(path)
+    BatchImport::Aircrafts.import_latest(package)
   end
 
 end

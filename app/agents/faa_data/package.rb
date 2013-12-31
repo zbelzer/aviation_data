@@ -1,20 +1,64 @@
 require 'open-uri'
 require 'fileutils'
-require 'zip/zipfilesystem'
 require 'zlib'
 
 class FaaData::Package
+  module VERSION
+    OLD = 'OLD'
+    NEW = 'NEW'
+  end
+
   WEBSITE_URL = "http://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download"
 
-  def initialize(zipped_directory)
-    @zipped_directory = zipped_directory
-    @directory = zipped_directory.gsub("\.zip", "")
+  def initialize(path)
+    path = FaaData::Package.root.join(path).to_s
+    @directory = Pathname.new(path.gsub(/\.zip\Z/, ''))
+  end
+
+  def name
+    @name ||= @directory.basename.to_s
+  end
+
+  def import_date
+    return @import_date if @import_date
+
+    name =~ /AR(\d{2})(\d{4})/
+    @import_date = Date.new($2.to_i, $1.to_i)
+  end
+
+  def version
+    extract
+    
+    current_version = VERSION::OLD
+    @directory.each_child do |child|
+      if child.fnmatch?('*.txt')
+        current_version = VERSION::NEW
+        break
+      end
+    end
+    current_version
+  end
+
+  def directory
+    extract
+    @directory
+  end
+
+  def extracted?
+    @directory.directory?
   end
 
   def extract
+    return if extracted?
+
     FileUtils.mkdir_p(@directory)
 
-    Zip::ZipFile::open(@zipped_directory) do |zf|
+    zipped_directory = @directory.join(".zip")
+    unless zipped_directory.exists?
+      raise "No zip version for #{name}, cannot decompress"
+    end
+
+    Zip::ZipFile::open(zipped_directory) do |zf|
       zf.each do |e|
         fpath = File.join(@directory, File.basename(e.name))
         zf.extract(e, fpath)
@@ -22,24 +66,20 @@ class FaaData::Package
     end
   end
 
-  def directory
-    extract unless File.directory?(@directory)
-    @directory
+  def find_file(name)
+    extract
+
+    if version == VERSION::OLD
+      @directory.join(name.upcase)
+    else
+      @directory.join("#{name.upcase}.txt")
+    end
   end
 
-  def name
-    File.basename(@directory)
-  end
+  def self.find
+    raise "The directory '#{root}' does not exists" unless root.directory?
 
-  def get_file(filename)
-    extract unless File.directory?(@directory)
-    File.join(@directory, filename)
-  end
-
-  def self.find_packages
-    raise "The directory '#{AIRCRAFT_DIR}' does not exists" unless File.directory?(AIRCRAFT_DIR)
-
-    files = Dir.glob("#{AIRCRAFT_DIR}/*.zip").sort do |a, b|
+    files = Dir.glob(root.join("AR*")).sort do |a, b|
       a = File.basename(a)
       b = File.basename(b)
 
@@ -49,7 +89,7 @@ class FaaData::Package
       left <=> right
     end
 
-    files.map {|dir| Package.new(dir)}
+    files.map {|dir| FaaData::Package.new(dir)}
   end
 
   def self.download_latest
@@ -57,14 +97,19 @@ class FaaData::Package
     download_url = site.scan(/http:\/\/registry.faa.gov\/database.*\.zip/).first
     filename = download_url.scan(/AR.*\.zip/).first
 
-    destination_path = File.join(AIRCRAFT_DIR, filename)
+    destination_path = root.join(filename)
 
-    FileUtils.mkdir_p(destination_path) unless File.directory?(destination_path)
-    if File.exists?(destination_path)
-      puts "Already have latest download"
+    if destination_path.exists?
+      puts "Already have latest download or file with same name exists"
     else
+      FileUtils.mkdir_p(destination_path)
+
       puts "Downloading #{download_url} to #{filename}"
       open(destination_path, "w").write(open(download_url).read)
     end
+  end
+
+  def self.root
+    Rails.root.join("db/data/aircraft")
   end
 end

@@ -29,7 +29,8 @@ class FaaData::S3
       next unless download_path = File.join(AIRCRAFT_DIR, pair[:name])
 
       File.open(download_path, "w+") do |file|
-        print_now "Downloading #{pair[:name]}... "
+        print_now "Downloading #{pair[:name]}... "m
+
 
         s3.get(BUCKET, pair[:key]) do |data|
           file.write data

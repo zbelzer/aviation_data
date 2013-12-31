@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+puts `rake db:rebuild`
+ 
+FaaData::Package.find.each do |package|
+  puts "Processing #{package.name}"
+
+  FaaData.import_from_package(package)
+
+  puts
+  puts "Importing identifiers from MASTER"
+  BatchImport::Identifiers.import_latest
+
+  puts
+  puts "Importing models from ACFTREF"
+  BatchImport::Models.import_latest
+
+  puts
+  puts "Importing aircrafts from MASTER"
+  BatchImport::Aircrafts.import_latest(package)
+  break
+end

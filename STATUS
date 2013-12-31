@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/bin/sh
 
 # The system currently:
 # * imports all enums as seeds
@@ -10,21 +10,9 @@
 # The batch runner doesn't like running after another batch runner. Likely it has
 # to do with running connections being disconnected or something.
 
-# rake db:rebuild
-# rake aircraft:source\[AR032009]
-# rake aircraft:identifiers\[AR032009]
-# rake aircraft:models\[AR032009]
-# rake aircraft:aircrafts\[AR032009]
 
-# puts `rake db:rebuild`
-# 
-# Dir["db/data/aircraft/AR*"].sort.each do |file|
-#   name = File.basename(file)
-#   puts "Processing #{name}"
-# 
-#   puts `rake aircraft:source[#{name}]`
-#   puts `rake aircraft:identifiers[#{name}]`
-#   puts `rake aircraft:models[#{name}]`
-#   puts `rake aircraft:aircrafts[#{name}]`
-#   break
-# end
+rake db:rebuild
+rake aircraft:source\[AR032008]
+rake aircraft:identifiers\[AR032008]
+rake aircraft:models\[AR032008]
+rake aircraft:aircrafts\[AR032008]

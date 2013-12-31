@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
     t.string  "owner_four"
     t.string  "owner_five"
     t.date    "expiration_date"
+    t.integer "unique_id"
   end
 
   add_index "master", ["aircraft_model_code"], :name => "index_master_on_aircraft_model_code"

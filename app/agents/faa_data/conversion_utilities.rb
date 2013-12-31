@@ -32,7 +32,7 @@ module FaaData::ConversionUtilities
     yield path
 
   ensure
-    FileUtils.rm path if File.exists?(path)
+    # FileUtils.rm path if File.exists?(path)
   end
 
   def escape_quotes(path)
@@ -61,12 +61,6 @@ module FaaData::ConversionUtilities
   def format_dates(path)
     run_step "Formatting dates for native conversion" do
       `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
-      # `sed -r -i "s/,([0-9]{2})([0-9]{4})/,\\1 01 \\2/g" #{path}`
-    end
-  end
-
-  def hash_from_row(headers, row)
-    Hash[*headers.zip(row).flatten(1)].tap do |data|
     end
   end
 

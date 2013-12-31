@@ -1,6 +1,6 @@
 module BatchImport::Identifiers
   def self.import_latest
-    BatchRunner.run(Master.missing_identifiers) do |batch_scope|
+    BatchImport::Runner.run(Master.missing_identifiers) do |batch_scope|
       identifiers = []
 
       identifiers = batch_scope.each_with_object([]) do |record, memo|
