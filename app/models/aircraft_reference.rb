@@ -8,6 +8,7 @@ class AircraftReference < ActiveRecord::Base
 
   scope :missing_models, lambda {
     joins("LEFT JOIN models ON aircraft_reference.code = models.code").
-    where(:models => {:code => nil})
+    where(:models => {:code => nil}).
+    order(:id)
   }
 end

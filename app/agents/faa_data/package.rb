@@ -60,11 +60,12 @@ class FaaData::Package
   def find_file(name)
     extract
 
-    if version == VERSION::OLD
-      @directory.join(name.upcase)
-    else
-      @directory.join("#{name.upcase}.txt")
+    path = @directory.join(name.upcase)
+    unless path.exist?
+      path = @directory.join("#{name.upcase}.txt")
     end
+
+    path
   end
 
   def self.find
@@ -90,7 +91,7 @@ class FaaData::Package
 
     destination_path = root.join(filename)
 
-    if destination_path.exists?
+    if destination_path.exist?
       puts "Already have latest download or file with same name exists"
     else
       FileUtils.mkdir_p(destination_path)

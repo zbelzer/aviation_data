@@ -6,11 +6,13 @@ class Master < ActiveRecord::Base
     joins("JOIN identifiers ON master.identifier = identifiers.code").
     joins("JOIN models ON master.aircraft_model_code = models.code").
     joins("LEFT JOIN aircrafts ON (aircrafts.identifier_id = identifiers.id AND aircrafts.model_id = models.id)").
-    where(:aircrafts => {:id => nil})
+    where(:aircrafts => {:id => nil}).
+    order(:id)
   }
 
   scope :missing_identifiers, lambda {
     joins("LEFT JOIN identifiers ON master.identifier = identifiers.code").
-    where(:identifiers => {:code => nil})
+    where(:identifiers => {:code => nil}).
+    order(:id)
   }
 end
