@@ -6,7 +6,7 @@ class FaaData::S3
 
   def self.upload(opts={})
     existing_files = files.empty? ? [] : files.map {|x| x[:name]}
-    new_files = Dir[File.join(AIRCRAFT_DIR, "*.zip")]
+    new_files = Dir[File.join(Package.root, "*.zip")]
 
     new_files.each do |file_name|
       if existing_files.include?(File.basename(file_name)) && !opts.fetch(:force, false)
@@ -29,7 +29,7 @@ class FaaData::S3
       next unless download_path = File.join(AIRCRAFT_DIR, pair[:name])
 
       File.open(download_path, "w+") do |file|
-        print_now "Downloading #{pair[:name]}... "m
+        print_now "Downloading #{pair[:name]}... "
 
 
         s3.get(BUCKET, pair[:key]) do |data|
