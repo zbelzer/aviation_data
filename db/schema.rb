@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121028000002) do
+ActiveRecord::Schema.define(:version => 20140105205851) do
 
 
   create_table "aircraft_categories", :force => true do |t|
@@ -74,12 +74,100 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
 
   add_index "countries", ["name"], :name => "index_countries_on_name", :unique => true
 
+  create_table "dealers", :force => true do |t|
+    t.string "certificate_number"
+    t.string "ownership"
+    t.string "certificate_date"
+    t.string "expiration_date"
+    t.string "expiration_flag"
+    t.string "certificate_issue_count"
+    t.string "name"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state_abbrev"
+    t.string "zip_code"
+    t.string "other_names_count"
+    t.string "other_names_1"
+    t.string "other_names_2"
+    t.string "other_names_3"
+    t.string "other_names_4"
+    t.string "other_names_5"
+    t.string "other_names_6"
+    t.string "other_names_7"
+    t.string "other_names_8"
+    t.string "other_names_9"
+    t.string "other_names_10"
+    t.string "other_names_11"
+    t.string "other_names_12"
+    t.string "other_names_13"
+    t.string "other_names_14"
+    t.string "other_names_15"
+    t.string "other_names_16"
+    t.string "other_names_17"
+    t.string "other_names_18"
+    t.string "other_names_19"
+    t.string "other_names_20"
+    t.string "other_names_21"
+    t.string "other_names_22"
+    t.string "other_names_23"
+    t.string "other_names_24"
+    t.string "other_names_25"
+  end
+
+  create_table "deregistered", :force => true do |t|
+    t.string  "identifier"
+    t.string  "serial_number"
+    t.string  "aircraft_model_code"
+    t.string  "status_code"
+    t.string  "name"
+    t.string  "address_1"
+    t.string  "address_2"
+    t.string  "city_mail"
+    t.string  "state_abbrev_mail"
+    t.string  "zip_code_mail"
+    t.integer "engine_mode_code"
+    t.integer "year_manufactured"
+    t.string  "certification"
+    t.string  "region"
+    t.string  "county_mail"
+    t.string  "country_mail"
+    t.date    "airworthiness_date"
+    t.date    "cancel_date"
+    t.string  "mode_s_code"
+    t.string  "indicator_group"
+    t.string  "exp_country"
+    t.date    "last_act_date"
+    t.date    "cert_issue_date"
+    t.string  "street_physical"
+    t.string  "street2_physical"
+    t.string  "city_physical"
+    t.string  "state_abbrev_physical"
+    t.string  "zip_code_physical"
+    t.string  "county_physical"
+    t.string  "country_physical"
+    t.string  "owner_1"
+    t.string  "owner_2"
+    t.string  "owner_3"
+    t.string  "owner_4"
+    t.string  "owner_5"
+  end
+
   create_table "engine_types", :force => true do |t|
     t.string "name",        :null => false
     t.string "description"
   end
 
   add_index "engine_types", ["name"], :name => "index_engine_types_on_name", :unique => true
+
+  create_table "engines", :force => true do |t|
+    t.string "code"
+    t.string "manufacturer"
+    t.string "model"
+    t.string "type"
+    t.string "horsepower"
+    t.string "thrust"
+  end
 
   create_table "identifier_types", :force => true do |t|
     t.string "name",        :null => false
@@ -171,6 +259,21 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
   add_index "models", ["engine_type_id"], :name => "index_models_on_engine_type_id"
   add_index "models", ["manufacturer_name_id"], :name => "index_models_on_manufacturer_name_id"
   add_index "models", ["model_name_id"], :name => "index_models_on_model_name_id"
+
+  create_table "reserved", :force => true do |t|
+    t.string "identifier"
+    t.string "registrant"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "code"
+    t.string "reserved_date"
+    t.string "tr"
+    t.string "expirtation_date"
+    t.string "identifier_change"
+  end
 
   create_table "states", :force => true do |t|
     t.string "name",        :null => false

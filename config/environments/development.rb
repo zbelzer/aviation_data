@@ -27,4 +27,7 @@ AviationData::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Set custom generators
+  config.generators.test_framework :rspec
 end

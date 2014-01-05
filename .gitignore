@@ -6,15 +6,14 @@
 
 # Ignore bundler config
 /.bundle
+/.yardoc
 
-# Ignore the default SQLite database.
+# Ignore database related items
 /db/*.sqlite3
-
 /db/data
+/config/database.yml
 
-# Ignore all logfiles and tempfiles.
-/log/*.log
+# Ignore others
+/log
 /tmp
-
-config/database.yml
-.yardoc
+/coverage
