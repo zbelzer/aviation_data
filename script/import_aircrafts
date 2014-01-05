@@ -8,7 +8,7 @@ FaaData::Package.find.each do |package|
   puts "Processing #{package.name}"
   puts "=========================="
 
-  FaaData.import_package(package)
+  FaaData::Aircrafts.import_package(package)
 
   puts
   puts "Importing identifiers from MASTER"

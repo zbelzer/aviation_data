@@ -8,27 +8,8 @@ module FaaData
     # 'RELDOMCB' => %w(unique_number first_name last_name address_1 address_2 city state zip country region medical_class medical_date medical_expiration_date),
     # 'RELDOMCC' => %w(unique_number first_name last_name certificate_type level expiration_date) + RATINGS
   }
-
-  AIRCRAFT_TABLES = [
-    FaaData::Master,
-    FaaData::Acftref,
-    # FaaData::Dereg,
-    # FaaData::Dealer,
-    # FaaData::Engine,
-    # FaaData::Reserved
-  ]
-
   AIRMEN_TABLE_MAP = [
     ['RELDOMCB', 'airmen'],
     ['RELDOMCC', 'certificates']
   ]
-
-  def self.import_package(package)
-    FaaData::AIRCRAFT_TABLES.each do |data_file|
-      puts
-      puts "Importing #{data_file}"
-
-      data_file.import_from(package)
-    end
-  end
 end
