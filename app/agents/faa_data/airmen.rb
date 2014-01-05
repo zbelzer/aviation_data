@@ -1,16 +1,21 @@
-# Entry point for importing airment information from the FAA.
+# Entry point for importing airmen information from the FAA.
 module FaaData::Airmen
-  # Airmen file headers.
-  HEADERS = {
-    # 'RELDOMCB' => %w(unique_number first_name last_name address_1 address_2 city state zip country region medical_class medical_date medical_expiration_date),
-    # 'RELDOMCC' => %w(unique_number first_name last_name certificate_type level expiration_date rating1 rating2 rating3 rating4 rating5 rating6 rating7 rating8 rating9 rating10 rating11)
-  }
-
   # Files found in releasable aircraft data packages.
   AIRMEN_TABLE_MAP = [
     ['RELDOMCB', 'airmen'],
     ['RELDOMCC', 'certificates']
   ]
+
+  # Import Airman information
+  def self.import
+    FaaData::Airmen::AIRMEN_TABLE_MAP.each do |type, collection|
+      path = FaaData::Airmen.root.join(type)
+      fields = AviationData::HEADERS[type]
+
+      new_path = AviationData::ConversionUtilities.convert_to_json(path, fields)
+      AviationData::ImportUtilities.import_into_mongo(AviationData::DATABASE, collection, new_path, fields)
+    end
+  end
 
   # The root path for airman data.
   #

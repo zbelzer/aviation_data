@@ -1,4 +1,8 @@
+# Utilities for importing data from AircraftReference to Model.
 module BatchImport::Models
+  # Create only new Models from current Master information.
+  #
+  # @param [Package] package
   def self.import_latest
     ManufacturerName.enumeration_model_updates_permitted = true
     ModelName.enumeration_model_updates_permitted = true

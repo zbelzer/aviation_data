@@ -1,3 +1,8 @@
+# Aircrafts available for lookup.
+#
+# More than one aircraft with the same identifier can exist, but it may not
+# exist with a different model during the same period. This represents
+# identifiers being reused over time as tail numbers on different aircraft.
 class Aircraft < ActiveRecord::Base
   belongs_to :model
   belongs_to :identifier

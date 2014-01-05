@@ -1,10 +1,18 @@
+# Parallel batch import utility.
 module BatchImport::Runner
+  # Number of processes to run.
   PROCESS_COUNT = 6.0
+
+  # Options to send the Parallel helper.
   PARALLEL_OPTIONS = {
     :preserve_results => false,
     :in_processes     => PROCESS_COUNT
   }
 
+  # Run a batch import, splitting the models returned by the given scope into
+  # parallelizable batches.
+  #
+  # @param [ActiveRecord::Relation] scope
   def self.run(scope)
     total = scope.count
 
@@ -38,6 +46,11 @@ module BatchImport::Runner
     puts "Import Complete"
   end
 
+  # Helper for the simple math to split up a number into chunks.
+  #
+  # @param [Integer] batch_size
+  # @param [Integer] total
+  # @return [Array<Array<limit, offset>>]
   def self.create_batches(batch_size, total)
     batches = []
     limit   = 0

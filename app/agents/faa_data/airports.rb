@@ -1,3 +1,4 @@
+# Entry point for importing airport information from various sources.
 module FaaData::Airports
   # The root path for airport data.
   #

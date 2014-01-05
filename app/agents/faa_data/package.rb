@@ -107,8 +107,4 @@ class FaaData::Package
       open(destination_path, "w").write(open(download_url).read)
     end
   end
-
-  def self.root
-    Rails.root.join("db/data/aircraft")
-  end
 end
