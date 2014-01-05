@@ -12,7 +12,7 @@ FaaData::Package.find.each do |package|
 
   puts
   puts "Importing identifiers from MASTER"
-  BatchImport::Identifiers.import_latest
+  BatchImport::Identifiers.import_latest(package)
 
   puts
   puts "Importing models from ACFTREF"

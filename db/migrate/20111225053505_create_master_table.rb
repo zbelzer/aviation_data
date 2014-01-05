@@ -32,6 +32,9 @@ class CreateMasterTable < ActiveRecord::Migration
       t.string :owner_five
       t.date :expiration_date
       t.integer :unique_id
+      t.string :kit_manufacturer
+      t.string :kit_model
+      t.string :mode_s_code_hex
     end
 
     add_index :master, :identifier

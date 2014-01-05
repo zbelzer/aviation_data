@@ -1,5 +1,5 @@
 module BatchImport::Identifiers
-  def self.import_latest
+  def self.import_latest(package)
     BatchImport::Runner.run(Master.missing_identifiers) do |batch_scope|
       identifiers = []
 

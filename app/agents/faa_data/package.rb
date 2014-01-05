@@ -4,8 +4,9 @@ require 'zlib'
 
 class FaaData::Package
   module VERSION
-    OLD = 'OLD'
-    NEW = 'NEW'
+    V1 = 'V1'
+    V2 = 'V2'
+    V3 = 'V3'
   end
 
   WEBSITE_URL = "http://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download"
@@ -27,7 +28,13 @@ class FaaData::Package
   end
 
   def version
-    import_date > Date.new(2011, 6) ? VERSION::NEW : VERSION::OLD
+    if import_date <= Date.new(2011, 6)
+      VERSION::V1
+    elsif import_date < Date.new(2012, 11)
+      VERSION::V2
+    else
+      VERSION::V3
+    end
   end
 
   def directory
