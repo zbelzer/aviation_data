@@ -18,7 +18,7 @@ module FaaData::ReleasableDataFile
     @model.delete_all
 
     FaaData::ConversionUtilities.prepare_for_import(path, columns) do |converted_path|
-      ::PsqlImportUtilities.import(table_name, converted_path, columns)
+      ::PostgresImportUtilities.import(table_name, converted_path, columns)
     end
   end
 

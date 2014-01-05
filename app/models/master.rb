@@ -1,3 +1,9 @@
+# Records that indicate the pairings between identifiers (N-Numbers), engines
+# and models.
+#
+# Per documentation:
+# "Contains the records of all U.S. Civil Aircraft maintained by the FAA, Civil
+# Aviation Registry, Aircraft Registration Branch, AFS-750"
 class Master < ActiveRecord::Base
   set_table_name 'master'
 

@@ -1,4 +1,4 @@
-class CreateMasterTable < ActiveRecord::Migration
+class CreateMaster < ActiveRecord::Migration
   def change
     create_table :master do |t|
       t.string :identifier

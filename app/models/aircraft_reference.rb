@@ -1,3 +1,4 @@
+# Aircraft reference information imported from the FAA.
 class AircraftReference < ActiveRecord::Base
   set_table_name 'aircraft_reference'
 

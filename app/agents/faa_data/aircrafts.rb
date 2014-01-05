@@ -21,4 +21,11 @@ module FaaData::Aircrafts
       data_file.import_from(package)
     end
   end
+
+  # The root path for aircraft packages.
+  #
+  # @return [Pathname]
+  def self.root
+    FaaData.join("aircraft")
+  end
 end

@@ -1,3 +1,4 @@
+# Model information imported from the FAA.
 class Model < ActiveRecord::Base
   has_enumerated :manufacturer_name
   has_enumerated :model_name

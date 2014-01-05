@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140105205851) do
+ActiveRecord::Schema.define(:version => 20121028000002) do
 
 
   create_table "aircraft_categories", :force => true do |t|
