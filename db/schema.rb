@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121028000002) do
+ActiveRecord::Schema.define(:version => 20140106021214) do
 
 
   create_table "aircraft_categories", :force => true do |t|
@@ -53,6 +53,18 @@ ActiveRecord::Schema.define(:version => 20121028000002) do
   add_index "aircrafts", ["identifier_id", "model_id"], :name => "index_aircrafts_on_identifier_id_and_model_id", :unique => true
   add_index "aircrafts", ["identifier_id"], :name => "index_aircrafts_on_identifier_id"
   add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
+
+  create_table "airports", :force => true do |t|
+    t.string  "name"
+    t.string  "icao"
+    t.string  "iata"
+    t.decimal "latitude"
+    t.decimal "longitude"
+    t.string  "magnetic_variance"
+    t.integer "elevation"
+    t.integer "country_id"
+    t.string  "time_zone"
+  end
 
   create_table "builder_certifications", :force => true do |t|
     t.string "name",        :null => false

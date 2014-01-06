@@ -1,21 +1,29 @@
+require 'csv'
+
 # The 'icao' airport database format.
 module FaaData::Airports::Icao
+  # Headers of the ICAO format.
+  HEADERS = %w(icao iata name)
+
   # Import airports from the icao database format.
   #
   # @param [String, Pathname] file_path
   # @return [Array<Airport>]
   def self.import(file_path)
-    headers = %w(icao iata name)
     airports = []
 
-    File.foreach(file_path) do |row|
-      count += 1
-      values = row.split(",").map {|v| v[-1...-1]}
-      row = Hash[*headers.zip(values).flatten(1)]
+    CSV.foreach(file_path, :headers => HEADERS, :converters => :all) do |row|
+      attributes = {
+        :name => row["name"],
+        :iata => row["iata"],
+        :icao => row["icao"],
+      }
 
-      icao = row.delete("icao")
-      airports << Airport.create!(:icao => icao)
+      airport = Airport.new(attributes)
+      airport.save(:validate => false)
+      airports << airport
     end
 
+    airports
   end
 end

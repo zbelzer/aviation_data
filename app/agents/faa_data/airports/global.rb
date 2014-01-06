@@ -1,27 +1,42 @@
+require 'csv'
+
 # The 'global' airport database format.
 module FaaData::Airports::Global
+  # Headers of the global format.
+  HEADERS = %w(icao iata name address country lat_deg lat_min lat_sec lat_dir lon_deg lon_min lon_sec lon_dir elevation) 
+
   # Import airports from the global database format.
   #
   # @param [String, Pathname] file_path
   # @return [Array<Airport>]
   def self.import(file_path)
-    headers = %w(icao iata name address country lat_deg lat_min lat_sec lat_dir lon_deg lon_min lon_sec lon_dir elevation) 
     airports = []
 
-    File.foreach(file_path) do |line|
-      values = line.split(":")
-      row = Hash[*headers.zip(values).flatten(1)]
+    countries = Country.all.inject({}) do |memo, country|
+      memo[country.description] = country.id
+      memo
+    end
 
+    CSV.foreach(file_path, :headers => HEADERS, :converters => :all, :col_sep => ':') do |row|
       latitude = make_coord_global("lat", row)
       longitude = make_coord_global("lon", row)
 
-      data = row.reject {|x| x.first =~ /lat|lon/ || x.last =~ /N\/A/}
-      icao = data.delete("icao")
+      attributes = {
+        :name      => row["name"],
+        :iata      => row["iata"],
+        :icao      => row["icao"],
+        :longitude => longitude,
+        :latitude  => latitude,
+        :country_id => countries[row["country"]],
+        :elevation => row["elevation"],
+      }
 
-      data.merge!("latitude" => latitude, "longitude" => longitude)
-
-      airports << Airport.create!(:icao => icao)
+      airport = Airport.new(attributes)
+      airport.save(:validate => false)
+      airports << airport
     end
+
+    airports
   end
 
   # Converts latitude and longitude to appropriate decimals.

@@ -4,6 +4,6 @@ module FaaData::Airports
   #
   # @return [Pathname]
   def self.root
-    @root ||= FaaData.join('airports')
+    @root ||= FaaData.root.join('airports')
   end
 end
