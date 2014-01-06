@@ -2,7 +2,7 @@
 
 puts `rake db:rebuild`
  
-FaaData::Package.find.each do |package|
+FaaData::AircraftPackage.find.each do |package|
   puts
   puts "=========================="
   puts "Processing #{package.name}"

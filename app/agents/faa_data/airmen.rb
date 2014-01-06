@@ -8,12 +8,13 @@ module FaaData::Airmen
 
   # Import Airman information
   def self.import
-    FaaData::Airmen::AIRMEN_TABLE_MAP.each do |type, collection|
+    FaaData::Airmen::AIRMEN_TABLE_MAP.each do |type, table_name|
       path = FaaData::Airmen.root.join(type)
       fields = AviationData::HEADERS[type]
 
-      new_path = AviationData::ConversionUtilities.convert_to_json(path, fields)
-      AviationData::ImportUtilities.import_into_mongo(AviationData::DATABASE, collection, new_path, fields)
+      FaaData::ConversionUtilities.prepare_for_import(path, columns) do |converted_path|
+        ::PostgresImportUtilities.import(table_name, converted_path, columns)
+      end
     end
   end
 
@@ -21,6 +22,6 @@ module FaaData::Airmen
   #
   # @return [Pathname]
   def self.root
-    @root ||= FaaData.join('airmen')
+    @root ||= FaaData.root.join('airmen')
   end
 end

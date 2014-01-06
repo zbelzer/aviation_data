@@ -4,21 +4,12 @@ require 'zlib'
 
 # Represents a 'Releasable Aircraft Database Download' package.
 class FaaData::Package
-  # Version identifiers for different variations of headers.
-  module VERSION
-    # :nodoc:
-    V1 = 'V1'
-    # :nodoc:
-    V2 = 'V2'
-    # :nodoc:
-    V3 = 'V3'
-  end
 
   # Location of new data files.
   WEBSITE_URL = "http://registry.faa.gov/database"
 
   def initialize(path)
-    path = FaaData::Package.root.join(path).to_s
+    path = root.join(path).to_s
     @directory = Pathname.new(path.gsub(/\.zip\Z/, ''))
   end
 
@@ -35,7 +26,7 @@ class FaaData::Package
   def import_date
     return @import_date if @import_date
 
-    name =~ /AR(\d{2})(\d{4})/
+    name =~ /#{self.class.prefix}(\d{2})(\d{4})/
     @import_date = Date.new($2.to_i, $1.to_i)
   end
 
@@ -43,13 +34,6 @@ class FaaData::Package
   #
   # @return [String]
   def version
-    if import_date <= Date.new(2011, 6)
-      VERSION::V1
-    elsif import_date < Date.new(2012, 11)
-      VERSION::V2
-    else
-      VERSION::V3
-    end
   end
 
   # Directory of extracted package.
@@ -102,13 +86,21 @@ class FaaData::Package
   end
   private :extract
 
+  # Instance method access to class' root.
+  #
+  # @return [Pathname]
+  def root
+    self.class.root
+  end
+  private :root
+
   # Find all packages.
   #
   # @return [Array<Package>]
   def self.find
     raise "The directory '#{root}' does not exists" unless root.directory?
 
-    files = Dir.glob(root.join("AR*")).sort do |a, b|
+    files = Dir.glob(root.join("#{prefix}*")).sort do |a, b|
       a = File.basename(a)
       b = File.basename(b)
 
@@ -118,7 +110,7 @@ class FaaData::Package
       left <=> right
     end
 
-    files.map {|dir| FaaData::Package.new(dir)}
+    files.map {|dir| new(dir)}
   end
 
   # Download the latest package from the FAA website.
@@ -126,7 +118,7 @@ class FaaData::Package
     filename    = current_name
     zipname     = "#{filename}.zip"
     remote_path = File.join(WEBSITE_URL, zipname)
-    local_path  = Aircrafts.root.join(zipname)
+    local_path  = root.join(zipname)
 
     if local_path.exist?
       false
@@ -155,7 +147,6 @@ class FaaData::Package
   #
   # @return [String]
   def self.current_name
-    Date.today.strftime("AR%m%Y")
-    "AR122013"
+    Date.today.strftime("#{prefix}%m%Y")
   end
 end

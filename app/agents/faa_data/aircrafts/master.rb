@@ -20,9 +20,9 @@ module FaaData::Aircrafts
 
     # Headers that appear in later additions to the specification.
     VERSION_HEADERS = {
-      FaaData::Package::VERSION::V1 => [],
-      FaaData::Package::VERSION::V2 => %w(expiration_date unique_id),
-      FaaData::Package::VERSION::V3 => %w(kit_manufacturer kit_model mode_s_code_hex)
+      FaaData::AircraftPackage::VERSION::V1 => [],
+      FaaData::AircraftPackage::VERSION::V2 => %w(expiration_date unique_id),
+      FaaData::AircraftPackage::VERSION::V3 => %w(kit_manufacturer kit_model mode_s_code_hex)
     }
 
     # Find the headers for this file specified by version.
