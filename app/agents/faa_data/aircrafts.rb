@@ -26,6 +26,6 @@ module FaaData::Aircrafts
   #
   # @return [Pathname]
   def self.root
-    FaaData.join("aircraft")
+    FaaData.root.join("aircraft")
   end
 end
