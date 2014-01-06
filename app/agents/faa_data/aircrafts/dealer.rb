@@ -3,7 +3,7 @@ module FaaData::Aircrafts
   module Dealer
     extend FaaData::ReleasableDataFile
 
-    model Dealer
+    model ::Dealer
 
     # Find the headers for this file specified by version.
     #

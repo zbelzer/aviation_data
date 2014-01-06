@@ -1,20 +1,18 @@
 # Entry point for importing airmen information from the FAA.
 module FaaData::Airmen
-  # Files found in releasable aircraft data packages.
-  AIRMEN_TABLE_MAP = [
-    ['RELDOMCB', 'airmen'],
-    ['RELDOMCC', 'certificates']
+  # Files found in releasable airmen data packages.
+  FILES = [
+    FaaData::Airmen::PilotBasic,
+    FaaData::Airmen::PilotCert
   ]
 
   # Import Airman information
-  def self.import
-    FaaData::Airmen::AIRMEN_TABLE_MAP.each do |type, table_name|
-      path = FaaData::Airmen.root.join(type)
-      fields = AviationData::HEADERS[type]
+  def self.import_package(package)
+    FILES.each do |data_file|
+      puts
+      puts "Importing #{data_file}"
 
-      FaaData::ConversionUtilities.prepare_for_import(path, columns) do |converted_path|
-        ::PostgresImportUtilities.import(table_name, converted_path, columns)
-      end
+      data_file.import_from(package)
     end
   end
 

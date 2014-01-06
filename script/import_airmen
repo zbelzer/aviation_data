@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+ 
+FaaData::AirmenPackage.find.each do |package|
+  puts
+  puts "=========================="
+  puts "Processing #{package.name}"
+  puts "=========================="
+
+  FaaData::Airmen.import_package(package)
+end

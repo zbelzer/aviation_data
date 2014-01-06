@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106021214) do
+ActiveRecord::Schema.define(:version => 20140106212654) do
 
 
   create_table "aircraft_categories", :force => true do |t|
@@ -54,6 +54,22 @@ ActiveRecord::Schema.define(:version => 20140106021214) do
   add_index "aircrafts", ["identifier_id"], :name => "index_aircrafts_on_identifier_id"
   add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
 
+  create_table "airmen", :force => true do |t|
+    t.string "unique_number"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "country"
+    t.string "region"
+    t.string "medical_class"
+    t.date   "medical_date"
+    t.date   "medical_expiration_date"
+  end
+
   create_table "airports", :force => true do |t|
     t.string  "name"
     t.string  "icao"
@@ -72,6 +88,48 @@ ActiveRecord::Schema.define(:version => 20140106021214) do
   end
 
   add_index "builder_certifications", ["name"], :name => "index_builder_certifications_on_name", :unique => true
+
+  create_table "certificate_levels", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "certificate_levels", ["name"], :name => "index_certificate_levels_on_name", :unique => true
+
+  create_table "certificate_ratings", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "certificate_ratings", ["name"], :name => "index_certificate_ratings_on_name", :unique => true
+
+  create_table "certificate_types", :force => true do |t|
+    t.string "name",         :null => false
+    t.string "description"
+    t.string "abbreviation"
+  end
+
+  add_index "certificate_types", ["name"], :name => "index_certificate_types_on_name", :unique => true
+
+  create_table "certificates", :force => true do |t|
+    t.string "unique_number"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "certificate_type_id"
+    t.string "level"
+    t.date   "expiration_date"
+    t.string "rating1"
+    t.string "rating2"
+    t.string "rating3"
+    t.string "rating4"
+    t.string "rating5"
+    t.string "rating6"
+    t.string "rating7"
+    t.string "rating8"
+    t.string "rating9"
+    t.string "rating10"
+    t.string "rating11"
+  end
 
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
@@ -271,6 +329,142 @@ ActiveRecord::Schema.define(:version => 20140106021214) do
   add_index "models", ["engine_type_id"], :name => "index_models_on_engine_type_id"
   add_index "models", ["manufacturer_name_id"], :name => "index_models_on_manufacturer_name_id"
   add_index "models", ["model_name_id"], :name => "index_models_on_model_name_id"
+
+  create_table "pilot_basic", :force => true do |t|
+    t.string "unique_number"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "country"
+    t.string "region"
+    t.string "medical_class"
+    t.string "medical_date"
+    t.string "medical_expiration_date"
+  end
+
+  create_table "pilot_cert", :force => true do |t|
+    t.string "unique_number"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "certificate_type"
+    t.string "level"
+    t.string "expiration_date"
+    t.string "rating1"
+    t.string "rating2"
+    t.string "rating3"
+    t.string "rating4"
+    t.string "rating5"
+    t.string "rating6"
+    t.string "rating7"
+    t.string "rating8"
+    t.string "rating9"
+    t.string "rating10"
+    t.string "rating11"
+    t.string "typerating1"
+    t.string "typerating2"
+    t.string "typerating3"
+    t.string "typerating4"
+    t.string "typerating5"
+    t.string "typerating6"
+    t.string "typerating7"
+    t.string "typerating8"
+    t.string "typerating9"
+    t.string "typerating10"
+    t.string "typerating11"
+    t.string "typerating12"
+    t.string "typerating13"
+    t.string "typerating14"
+    t.string "typerating15"
+    t.string "typerating16"
+    t.string "typerating17"
+    t.string "typerating18"
+    t.string "typerating19"
+    t.string "typerating20"
+    t.string "typerating21"
+    t.string "typerating22"
+    t.string "typerating23"
+    t.string "typerating24"
+    t.string "typerating25"
+    t.string "typerating26"
+    t.string "typerating27"
+    t.string "typerating28"
+    t.string "typerating29"
+    t.string "typerating30"
+    t.string "typerating31"
+    t.string "typerating32"
+    t.string "typerating33"
+    t.string "typerating34"
+    t.string "typerating35"
+    t.string "typerating36"
+    t.string "typerating37"
+    t.string "typerating38"
+    t.string "typerating39"
+    t.string "typerating40"
+    t.string "typerating41"
+    t.string "typerating42"
+    t.string "typerating43"
+    t.string "typerating44"
+    t.string "typerating45"
+    t.string "typerating46"
+    t.string "typerating47"
+    t.string "typerating48"
+    t.string "typerating49"
+    t.string "typerating50"
+    t.string "typerating51"
+    t.string "typerating52"
+    t.string "typerating53"
+    t.string "typerating54"
+    t.string "typerating55"
+    t.string "typerating56"
+    t.string "typerating57"
+    t.string "typerating58"
+    t.string "typerating59"
+    t.string "typerating60"
+    t.string "typerating61"
+    t.string "typerating62"
+    t.string "typerating63"
+    t.string "typerating64"
+    t.string "typerating65"
+    t.string "typerating66"
+    t.string "typerating67"
+    t.string "typerating68"
+    t.string "typerating69"
+    t.string "typerating70"
+    t.string "typerating71"
+    t.string "typerating72"
+    t.string "typerating73"
+    t.string "typerating74"
+    t.string "typerating75"
+    t.string "typerating76"
+    t.string "typerating77"
+    t.string "typerating78"
+    t.string "typerating79"
+    t.string "typerating80"
+    t.string "typerating81"
+    t.string "typerating82"
+    t.string "typerating83"
+    t.string "typerating84"
+    t.string "typerating85"
+    t.string "typerating86"
+    t.string "typerating87"
+    t.string "typerating88"
+    t.string "typerating89"
+    t.string "typerating90"
+    t.string "typerating91"
+    t.string "typerating92"
+    t.string "typerating93"
+    t.string "typerating94"
+    t.string "typerating95"
+    t.string "typerating96"
+    t.string "typerating97"
+    t.string "typerating98"
+    t.string "typerating99"
+    t.string "dummy"
+  end
 
   create_table "reserved", :force => true do |t|
     t.string "identifier"

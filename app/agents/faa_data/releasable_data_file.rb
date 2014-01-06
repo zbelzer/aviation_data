@@ -17,7 +17,7 @@ module FaaData::ReleasableDataFile
 
     @model.delete_all
 
-    FaaData::ConversionUtilities.prepare_for_import(path, columns) do |converted_path|
+    FaaData::ConversionUtilities.prepare_for_import(path) do |converted_path|
       ::PostgresImportUtilities.import(table_name, converted_path, columns)
     end
   end
@@ -26,7 +26,7 @@ module FaaData::ReleasableDataFile
   #
   # @return [String]
   def file_name
-    name.split('::').last.upcase
+    name.split('::').last.underscore.upcase
   end
   alias_method :to_s, :file_name
   private :file_name

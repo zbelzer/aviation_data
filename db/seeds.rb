@@ -2,7 +2,7 @@ require 'csv'
 
 SEEDS_PATH = File.expand_path("../seeds", __FILE__)
 
-def seed(clazz, filename)
+def seed(clazz, filename, options = {})
   sql_path = File.join(SEEDS_PATH, "#{filename}.sql")
   csv_path = File.join(SEEDS_PATH, "#{filename}.csv")
   text_path = File.join(SEEDS_PATH, "#{filename}.txt")
@@ -21,7 +21,17 @@ def seed(clazz, filename)
 
     index = 0
     CSV.foreach(csv_path) do |row|
-      m = clazz.new(:name => row[0].strip, :description => row[1].strip)
+      attributes = {}
+
+      unless columns = options[:columns]
+        columns = [:name, :description]
+      end
+
+      columns.each_with_index do |col, i|
+        attributes[col] = row[i].try(:strip)
+      end
+
+      m = clazz.new(attributes)
       m.id = index
       m.save(:validate => false)
       index += 1
@@ -47,3 +57,6 @@ seed(BuilderCertification, "builder_certifications")
 seed(EngineType, "engine_types")
 seed(AircraftType, "aircraft_types")
 seed(AircraftCategory, "aircraft_categories")
+seed(CertificateType, "certificate_types", :columns => [:name, :abbreviation, :description])
+seed(CertificateLevel, "certificate_levels")
+seed(CertificateRating, "certificate_ratings")
