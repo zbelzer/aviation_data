@@ -1,6 +1,6 @@
 require 'open-uri'
 require 'fileutils'
-require 'zlib'
+require 'zip'
 
 # Represents a 'Releasable Aircraft Database Download' package.
 class FaaData::Package
@@ -34,6 +34,7 @@ class FaaData::Package
   #
   # @return [String]
   def version
+    nil
   end
 
   # Directory of extracted package.
@@ -42,6 +43,13 @@ class FaaData::Package
   def directory
     extract
     @directory
+  end
+
+  # Directory of compressed package.
+  #
+  # @return [Pathname]
+  def compressed_directory
+    Pathname.new("#{@directory}.zip")
   end
 
   # Has this package been extracted yet?
@@ -53,14 +61,15 @@ class FaaData::Package
 
   # Find a file within the package by the given name.
   #
-  # @param [Name]
+  # @param [Name] name
   # @return [Pathname]
   def find_file(name)
     extract
+    path = nil
 
-    path = @directory.join(name.upcase)
-    unless path.exist?
-      path = @directory.join("#{name.upcase}.txt")
+    ['', '.csv', '.txt'].each do |extension|
+      path = @directory.join("#{name.upcase}#{extension}")
+      break if path.exist?
     end
 
     path
@@ -72,12 +81,11 @@ class FaaData::Package
 
     FileUtils.mkdir_p(@directory)
 
-    zipped_directory = @directory.join(".zip")
-    unless zipped_directory.exists?
+    unless compressed_directory.exist?
       raise "No zip version for #{name}, cannot decompress"
     end
 
-    Zip::ZipFile::open(zipped_directory) do |zf|
+    Zip::File::open(compressed_directory) do |zf|
       zf.each do |e|
         fpath = File.join(@directory, File.basename(e.name))
         zf.extract(e, fpath)
@@ -98,7 +106,7 @@ class FaaData::Package
   #
   # @return [Array<Package>]
   def self.find
-    raise "The directory '#{root}' does not exists" unless root.directory?
+    raise "The directory '#{root}' does not exist" unless root.directory?
 
     files = Dir.glob(root.join("#{prefix}*")).sort do |a, b|
       a = File.basename(a)
