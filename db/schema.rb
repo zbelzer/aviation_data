@@ -352,6 +352,7 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
     t.string "medical_class"
     t.string "medical_date"
     t.string "medical_expiration_date"
+    t.string "dummy"
   end
 
   create_table "pilot_cert", :force => true do |t|

@@ -12,12 +12,20 @@ module FaaData::ReleasableDataFile
   #
   # @param [FaaData::Package] package
   def import_from(package)
+    version   = package.version
+
+    file_name = file_name(version)
+    options   = import_options(version)
+    columns   = headers(version)
+
+    puts
+    puts "Importing #{file_name}"
+
     path    = package.find_file(file_name)
-    columns = headers(package.version)
 
     @model.delete_all
 
-    FaaData::ConversionUtilities.prepare_for_import(path) do |converted_path|
+    FaaData::ConversionUtilities.prepare_for_import(path, options) do |converted_path|
       ::PostgresImportUtilities.import(table_name, converted_path, columns)
     end
   end
@@ -25,11 +33,19 @@ module FaaData::ReleasableDataFile
   # The file name for this data file within a package.
   #
   # @return [String]
-  def file_name
+  def file_name(version = nil)
     name.split('::').last.underscore.upcase
   end
   alias_method :to_s, :file_name
   private :file_name
+
+  # Options to send the import process. Usually hints about how to specially
+  # treat this version.
+  #
+  # @return [Hash]
+  def import_options(version = nil)
+    {}
+  end
 
   # The table name of the model this data file represents.
   #

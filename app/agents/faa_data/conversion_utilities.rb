@@ -6,7 +6,7 @@ module FaaData::ConversionUtilities
   #
   # @param [String] original_path
   # @yield [String] path Working path of prepared data
-  def prepare_for_import(original_path)
+  def prepare_for_import(original_path, options = {})
     # puts "Preparing #{original_path} for import"
 
     path = "#{original_path}.working"
@@ -15,7 +15,7 @@ module FaaData::ConversionUtilities
     compress_whitespace(path)
     remove_header(path)
     escape_quotes(path)
-    fix_columns(path)
+    fix_columns(path, options)
     format_dates(path)
 
     yield path
@@ -56,10 +56,9 @@ module FaaData::ConversionUtilities
   # Correct hanging columns that are sometimes present.
   #
   # @param [String] path
-  def fix_columns(path)
+  def fix_columns(path, options = {})
     run_step "Fixing columns" do
-      `sed -r -i "s/([^,]),$/\\1/g" #{path}`
-      # `sed -r -i "s/(,\r|\032)/,/g" #{path}`
+      `sed -r -i "s/([^,]),$/\\1/g" #{path}` if options[:strip_commas]
       `sed -i 's/,\\\\\,/,,/g' #{path}`
     end
   end

@@ -108,7 +108,9 @@ class FaaData::Package
   def self.find
     raise "The directory '#{root}' does not exist" unless root.directory?
 
-    files = Dir.glob(root.join("#{prefix}*")).sort do |a, b|
+    paths = Dir.glob(root.join("#{prefix}*"))
+    paths.uniq! { |p| File.basename(p, '.zip') }
+    paths.sort! do |a, b|
       a = File.basename(a)
       b = File.basename(b)
 
@@ -118,7 +120,7 @@ class FaaData::Package
       left <=> right
     end
 
-    files.map {|dir| new(dir)}
+    paths.map {|dir| new(dir)}
   end
 
   # Download the latest package from the FAA website.

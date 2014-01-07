@@ -15,9 +15,6 @@ module FaaData::Aircrafts
   # @param [FaaData::Package] package
   def self.import_package(package)
     FILES.each do |data_file|
-      puts
-      puts "Importing #{data_file}"
-
       data_file.import_from(package)
     end
   end

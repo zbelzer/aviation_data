@@ -9,9 +9,6 @@ module FaaData::Airmen
   # Import Airman information
   def self.import_package(package)
     FILES.each do |data_file|
-      puts
-      puts "Importing #{data_file}"
-
       data_file.import_from(package)
     end
   end

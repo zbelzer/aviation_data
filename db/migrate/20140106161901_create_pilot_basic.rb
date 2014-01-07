@@ -14,6 +14,7 @@ class CreatePilotBasic < ActiveRecord::Migration
       t.string :medical_class
       t.string :medical_date
       t.string :medical_expiration_date
+      t.string :dummy
     end
   end
 end
