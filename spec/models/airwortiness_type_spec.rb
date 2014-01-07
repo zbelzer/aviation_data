@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe CertificateRating do
+describe AirworthinessType do
   it { should act_as_enumerated }
 end

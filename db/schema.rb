@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106212654) do
+ActiveRecord::Schema.define(:version => 20140106212655) do
 
 
 
@@ -82,6 +82,13 @@ ActiveRecord::Schema.define(:version => 20140106212654) do
     t.integer "country_id"
     t.string  "time_zone"
   end
+
+  create_table "airworthiness_types", :force => true do |t|
+    t.string "name",        :null => false
+    t.string "description"
+  end
+
+  add_index "airworthiness_types", ["name"], :name => "index_airworthiness_types_on_name", :unique => true
 
   create_table "builder_certifications", :force => true do |t|
     t.string "name",        :null => false

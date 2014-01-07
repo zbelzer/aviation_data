@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe Certificate do
+describe Identifier do
 end

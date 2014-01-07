@@ -1,5 +1,8 @@
 require 'spec_helper'
 
 describe Airman do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "creates a new Dealer record" do
+    record = Airman.create
+    expect(record).to be_persisted
+  end
 end

@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe CertificateRating do
+describe Weight do
   it { should act_as_enumerated }
 end

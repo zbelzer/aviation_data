@@ -1,5 +1,8 @@
 require 'spec_helper'
 
 describe PilotCert do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "creates a new PilotCert record" do
+    record = PilotCert.create
+    expect(record).to be_persisted
+  end
 end
