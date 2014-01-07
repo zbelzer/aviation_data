@@ -1,6 +1,6 @@
 # Aircraft reference information imported from the FAA.
 class AircraftReference < ActiveRecord::Base
-  set_table_name 'aircraft_reference'
+  self.table_name = 'aircraft_reference'
 
   has_enumerated :aircraft_type
   has_enumerated :engine_type

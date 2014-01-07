@@ -5,5 +5,5 @@
 # reserved the Aircraft Registration N-number. File is in N-number sequence"
 #
 class Reserved < ActiveRecord::Base
-  set_table_name 'reserved'
+  self.table_name = 'reserved'
 end

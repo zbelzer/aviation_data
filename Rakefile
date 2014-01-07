@@ -12,8 +12,6 @@ namespace :db do
   task :rebuild => ['db:drop', 'db:create', 'db:migrate', 'db:seed']
 end
 
-RSpec::Core::RakeTask.new(:spec)
-
 task :default => :spec
 
 desc "Check documentation coverage"

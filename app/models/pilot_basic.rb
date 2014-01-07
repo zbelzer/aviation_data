@@ -1,3 +1,3 @@
 class PilotBasic < ActiveRecord::Base
-  set_table_name 'pilot_basic'
+  self.table_name = 'pilot_basic'
 end

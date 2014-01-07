@@ -1,8 +1,8 @@
-ruby '1.9.3'
+ruby '2.1.0'
 
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.2.16'
 
 gem 'activerecord-import'
 gem 'parallel'
@@ -12,21 +12,21 @@ gem 'power_enum'
 gem 'rubyzip'
 gem 'yajl-ruby'
 
+gem 'right_aws' # For s3
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
   gem 'jquery-rails'
 end
-
-gem 'right_aws'
 
 group :test, :development do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
-  gem 'rspec'
+  gem 'rspec-rails'
   gem 'simplecov'
   gem 'pry'
   gem 'yard'

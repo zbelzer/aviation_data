@@ -5,7 +5,7 @@
 # "Contains the records of all U.S. Civil Aircraft maintained by the FAA, Civil
 # Aviation Registry, Aircraft Registration Branch, AFS-750"
 class Master < ActiveRecord::Base
-  set_table_name 'master'
+  self.table_name = 'master'
 
   scope :missing_aircraft, lambda {
     select("master.*, identifiers.id AS identifier_id, models.id AS model_id").
