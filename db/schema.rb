@@ -14,6 +14,7 @@
 ActiveRecord::Schema.define(:version => 20140106212654) do
 
 
+
   create_table "aircraft_categories", :force => true do |t|
     t.string "name",        :null => false
     t.string "description"
@@ -494,6 +495,7 @@ ActiveRecord::Schema.define(:version => 20140106212654) do
   end
 
   add_index "weights", ["name"], :name => "index_weights_on_name", :unique => true
+
 
   add_foreign_key "aircrafts", "public.identifiers", :name => "aircrafts_identifier_id_fk", :column => "identifier_id", :exclude_index => true
   add_foreign_key "aircrafts", "public.models", :name => "aircrafts_model_id_fk", :column => "model_id", :exclude_index => true

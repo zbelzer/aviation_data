@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rake db:drop
+rake db:create
+
+psql aviation_data_development < $1

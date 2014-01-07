@@ -20,7 +20,7 @@ module FaaData::ConversionUtilities
 
     yield path
   ensure
-    # FileUtils.rm path if File.exists?(path)
+    FileUtils.rm path if File.exists?(path)
   end
 
   # Escape quotes.
