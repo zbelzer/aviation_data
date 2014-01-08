@@ -4,16 +4,11 @@ class CreateAirmen < ActiveRecord::Migration
       t.string :unique_number
       t.string :first_name
       t.string :last_name
-      t.string :address_1
-      t.string :address_2
-      t.string :city
-      t.string :state
-      t.string :zip
-      t.string :country
-      t.string :region
-      t.string :medical_class
+      t.integer :medical_class
       t.date :medical_date
       t.date :medical_expiration_date
     end
+
+    add_index :airmen, :unique_number, :unique => true
   end
 end

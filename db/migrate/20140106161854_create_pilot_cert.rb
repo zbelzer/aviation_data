@@ -119,5 +119,7 @@ class CreatePilotCert < ActiveRecord::Migration
       t.string :typerating99
       t.string :dummy
     end
+
+    add_index :pilot_cert, :unique_number
   end
 end

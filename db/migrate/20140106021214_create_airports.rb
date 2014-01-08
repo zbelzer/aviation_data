@@ -11,5 +11,10 @@ class CreateAirports < ActiveRecord::Migration
       t.integer :country_id
       t.string :time_zone
     end
+
+    add_index :airports, :name
+    add_index :airports, :icao, :unique => true
+    add_index :airports, :iata, :unique => true
+    add_index :airports, :country_id
   end
 end

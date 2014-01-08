@@ -16,5 +16,7 @@ class CreatePilotBasic < ActiveRecord::Migration
       t.string :medical_expiration_date
       t.string :dummy
     end
+
+    add_index :pilot_basic, :unique_number, :unique => true
   end
 end

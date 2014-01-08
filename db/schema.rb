@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106212655) do
+ActiveRecord::Schema.define(:version => 20140106161901) do
 
 
 
@@ -56,20 +56,15 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
   add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
 
   create_table "airmen", :force => true do |t|
-    t.string "unique_number"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "address_1"
-    t.string "address_2"
-    t.string "city"
-    t.string "state"
-    t.string "zip"
-    t.string "country"
-    t.string "region"
-    t.string "medical_class"
-    t.date   "medical_date"
-    t.date   "medical_expiration_date"
+    t.string  "unique_number"
+    t.string  "first_name"
+    t.string  "last_name"
+    t.integer "medical_class"
+    t.date    "medical_date"
+    t.date    "medical_expiration_date"
   end
+
+  add_index "airmen", ["unique_number"], :name => "index_airmen_on_unique_number", :unique => true
 
   create_table "airports", :force => true do |t|
     t.string  "name"
@@ -82,6 +77,11 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
     t.integer "country_id"
     t.string  "time_zone"
   end
+
+  add_index "airports", ["country_id"], :name => "index_airports_on_country_id"
+  add_index "airports", ["iata"], :name => "index_airports_on_iata", :unique => true
+  add_index "airports", ["icao"], :name => "index_airports_on_icao", :unique => true
+  add_index "airports", ["name"], :name => "index_airports_on_name"
 
   create_table "airworthiness_types", :force => true do |t|
     t.string "name",        :null => false
@@ -120,24 +120,14 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
   add_index "certificate_types", ["name"], :name => "index_certificate_types_on_name", :unique => true
 
   create_table "certificates", :force => true do |t|
-    t.string "unique_number"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "certificate_type_id"
-    t.string "level"
-    t.date   "expiration_date"
-    t.string "rating1"
-    t.string "rating2"
-    t.string "rating3"
-    t.string "rating4"
-    t.string "rating5"
-    t.string "rating6"
-    t.string "rating7"
-    t.string "rating8"
-    t.string "rating9"
-    t.string "rating10"
-    t.string "rating11"
+    t.integer "airman_id"
+    t.integer "certificate_type_id"
+    t.string  "level"
+    t.date    "expiration_date"
   end
+
+  add_index "certificates", ["airman_id"], :name => "index_certificates_on_airman_id"
+  add_index "certificates", ["certificate_type_id"], :name => "index_certificates_on_certificate_type_id"
 
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
@@ -355,6 +345,8 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
     t.string "dummy"
   end
 
+  add_index "pilot_basic", ["unique_number"], :name => "index_pilot_basic_on_unique_number", :unique => true
+
   create_table "pilot_cert", :force => true do |t|
     t.string "unique_number"
     t.string "first_name"
@@ -475,6 +467,8 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
     t.string "dummy"
   end
 
+  add_index "pilot_cert", ["unique_number"], :name => "index_pilot_cert_on_unique_number"
+
   create_table "reserved", :force => true do |t|
     t.string "identifier"
     t.string "registrant"
@@ -507,6 +501,9 @@ ActiveRecord::Schema.define(:version => 20140106212655) do
 
   add_foreign_key "aircrafts", "public.identifiers", :name => "aircrafts_identifier_id_fk", :column => "identifier_id", :exclude_index => true
   add_foreign_key "aircrafts", "public.models", :name => "aircrafts_model_id_fk", :column => "model_id", :exclude_index => true
+
+  add_foreign_key "certificates", "public.airmen", :name => "certificates_airman_id_fk", :column => "airman_id", :exclude_index => true
+  add_foreign_key "certificates", "public.certificate_types", :name => "certificates_certificate_type_id_fk", :column => "certificate_type_id", :exclude_index => true
 
   add_foreign_key "identifiers", "public.identifier_types", :name => "identifiers_identifier_type_id_fk", :column => "identifier_type_id", :exclude_index => true
 
