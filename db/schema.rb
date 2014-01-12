@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106161901) do
+ActiveRecord::Schema.define(:version => 20140112180610) do
 
 
 
@@ -128,6 +128,14 @@ ActiveRecord::Schema.define(:version => 20140106161901) do
 
   add_index "certificates", ["airman_id"], :name => "index_certificates_on_airman_id"
   add_index "certificates", ["certificate_type_id"], :name => "index_certificates_on_certificate_type_id"
+
+  create_table "certificates_ratings", :force => true do |t|
+    t.integer "certificate_id"
+    t.integer "certificate_rating_id"
+  end
+
+  add_index "certificates_ratings", ["certificate_id"], :name => "index_certificates_ratings_on_certificate_id"
+  add_index "certificates_ratings", ["certificate_rating_id"], :name => "index_certificates_ratings_on_certificate_rating_id"
 
   create_table "cities", :force => true do |t|
     t.string "name", :null => false
@@ -504,6 +512,9 @@ ActiveRecord::Schema.define(:version => 20140106161901) do
 
   add_foreign_key "certificates", "public.airmen", :name => "certificates_airman_id_fk", :column => "airman_id", :exclude_index => true
   add_foreign_key "certificates", "public.certificate_types", :name => "certificates_certificate_type_id_fk", :column => "certificate_type_id", :exclude_index => true
+
+  add_foreign_key "certificates_ratings", "public.certificate_ratings", :name => "certificates_ratings_certificate_rating_id_fk", :column => "certificate_rating_id", :exclude_index => true
+  add_foreign_key "certificates_ratings", "public.certificates", :name => "certificates_ratings_certificate_id_fk", :column => "certificate_id", :exclude_index => true
 
   add_foreign_key "identifiers", "public.identifier_types", :name => "identifiers_identifier_type_id_fk", :column => "identifier_type_id", :exclude_index => true
 
