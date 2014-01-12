@@ -38,9 +38,9 @@ module FaaData::Airmen::PilotBasic
   # @return [Hash]
   def self.import_options(version)
     if version == FaaData::AirmenPackage::VERSION::V1
-      {}
+      {:date_format => "MMYYYY"}
     else
-      {:strip_commas => true}
+      {:strip_commas => true, :date_format => "MMYYYY"}
     end
   end
 end

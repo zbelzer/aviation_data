@@ -5,7 +5,6 @@ module BatchImport::Identifiers
   # @param [Package] package
   def self.import_latest(package)
     BatchImport::Runner.run(Master.missing_identifiers) do |batch_scope|
-      identifiers = []
 
       identifiers = batch_scope.each_with_object([]) do |record, memo|
         memo << Identifier.new(

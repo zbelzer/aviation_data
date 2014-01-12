@@ -10,13 +10,16 @@ module FaaData::ConversionUtilities
     # puts "Preparing #{original_path} for import"
 
     path = "#{original_path}.working"
-    FileUtils.cp(original_path, path)
 
-    compress_whitespace(path)
-    remove_header(path)
-    escape_quotes(path)
-    fix_columns(path, options)
-    format_dates(path)
+    unless File.exist?(path)
+      FileUtils.cp(original_path, path)
+
+      compress_whitespace(path, options)
+      remove_header(path, options)
+      escape_quotes(path, options)
+      fix_columns(path, options)
+      format_dates(path, options)
+    end
 
     yield path
   ensure
@@ -25,8 +28,9 @@ module FaaData::ConversionUtilities
 
   # Escape quotes.
   #
+  # @param [Hash] options
   # @param [String] path
-  def escape_quotes(path)
+  def escape_quotes(path, options = {})
     run_step "Escaping quotes" do
       `sed -r -i "s#\\"#\\\"#g" #{path}`
     end
@@ -45,8 +49,9 @@ module FaaData::ConversionUtilities
 
   # Strip excess whitespace and carriage returns.
   #
+  # @param [Hash] options
   # @param [String] path
-  def compress_whitespace(path)
+  def compress_whitespace(path, options = {})
     run_step "Compressing whitespace" do
       `sed -r -i "s/\s+,/,/g" #{path}`
       `sed -r -i "s/\r$//g" #{path}`
@@ -55,6 +60,7 @@ module FaaData::ConversionUtilities
 
   # Correct hanging columns that are sometimes present.
   #
+  # @param [Hash] options
   # @param [String] path
   def fix_columns(path, options = {})
     run_step "Fixing columns" do
@@ -65,8 +71,9 @@ module FaaData::ConversionUtilities
 
   # Remove the header row in a file.
   #
+  # @param [Hash] options
   # @param [String] path
-  def remove_header(path)
+  def remove_header(path, options = {})
     run_step "Dropping provided header" do
       `sed '1d' -i #{path}`
     end
@@ -74,11 +81,19 @@ module FaaData::ConversionUtilities
 
   # Format dates for direct import into a PostgreSQL database.
   #
+  # @param [Hash] options
   # @param [String] path
-  def format_dates(path)
+  def format_dates(path, options = {})
+    puts "Converting dates with #{options[:date_format]} format"
     run_step "Formatting dates for native conversion" do
-      `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
-      `sed -r -i "s#,([0-9]{2})([1-2]{1}[0-9]{3})#,\\2\/01\/\\1#g" #{path}`
+      case options[:date_format]
+      when "YYYYMMDD"
+        `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
+      when "MMDDYYYY"
+        `sed -r -i "s#,([0-9]{2})([0-9]{2})([1-2]{1}[0-9]{3})#,\\3\/\\1/\\2#g" #{path}`
+      when "MMYYYY"
+        `sed -r -i "s#,([0-9]{2})([1-2]{1}[0-9]{3})#,\\2\/01\/\\1#g" #{path}`
+      end
     end
   end
 

@@ -7,4 +7,12 @@ FaaData::AirmenPackage.find.each do |package|
   puts "=========================="
 
   FaaData::Airmen.import_package(package)
+
+  puts
+  puts "Importing airmen"
+  BatchImport::Airmen.import_latest(package)
+
+  puts
+  puts "Importing certificates"
+  BatchImport::Certificates.import_latest(package)
 end
