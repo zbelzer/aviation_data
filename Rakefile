@@ -14,6 +14,10 @@ end
 
 task :default => :spec
 
+spec_task = Rake::Task['spec']
+spec_task.clear_prerequisites
+spec_task.enhance %w(db:test:prepare db:seed)
+
 desc "Check documentation coverage"
 task :doc do
   YARD::CLI::Stats.run('--list-undoc')
