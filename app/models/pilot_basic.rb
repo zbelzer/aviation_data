@@ -1,3 +1,4 @@
+# Pilot information imported from the FAA.
 class PilotBasic < ActiveRecord::Base
   self.table_name = 'pilot_basic'
 

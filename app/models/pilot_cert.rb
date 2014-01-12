@@ -1,3 +1,4 @@
+# Pilot certification information imported from the FAA.
 class PilotCert < ActiveRecord::Base
   self.table_name = 'pilot_cert'
 
