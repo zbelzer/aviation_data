@@ -10,10 +10,11 @@ module BatchImport::Airmen
 
       airmen = batch_scope.each_with_object([]) do |record, memo|
         airman = Airman.new(
-          :unique_number           => record.unique_number,
-          :first_name              => record.first_name,
-          :last_name               => record.last_name,
-          :medical_class           => record.medical_class
+          :unique_number => record.unique_number,
+          :first_name    => record.first_name,
+          :last_name     => record.last_name,
+          :medical_class => record.medical_class,
+          :import_date   => package.import_date
         )
 
         set_date(record, airman, :medical_date)

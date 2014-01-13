@@ -5,6 +5,7 @@ class CreateCertificates < ActiveRecord::Migration
       t.integer :certificate_type_id
       t.string :level
       t.date :expiration_date
+      t.date :import_date
     end
 
     add_foreign_key :certificates, :airmen

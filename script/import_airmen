@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
  
 FaaData::AirmenPackage.find.each do |package|
+  if package.import_date <= Airman.last_import_date
+    puts "Skipping #{package.name}"
+    next
+  end
+
   puts
   puts "=========================="
   puts "Processing #{package.name}"

@@ -12,7 +12,8 @@ module BatchImport::Certificates
         certificate = Certificate.new(
           :airman_id           => record.airman_id,
           :certificate_type_id => record.certificate_type_id,
-          :level               => record.level
+          :level               => record.level,
+          :import_date         => package.import_date
         )
 
         set_date(record, certificate, :expiration_date)

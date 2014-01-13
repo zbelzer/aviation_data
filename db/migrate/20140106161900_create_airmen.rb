@@ -7,6 +7,7 @@ class CreateAirmen < ActiveRecord::Migration
       t.integer :medical_class
       t.date :medical_date
       t.date :medical_expiration_date
+      t.date :import_date
     end
 
     add_index :airmen, :unique_number, :unique => true
