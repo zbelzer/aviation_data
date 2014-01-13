@@ -8,6 +8,7 @@ class AircraftReference < ActiveRecord::Base
   has_enumerated :builder_certification
 
   scope :missing_models, lambda {
+    select("aircraft_reference.*").
     joins("LEFT JOIN models ON aircraft_reference.code = models.code").
     where(:models => {:code => nil}).
     order(:id)

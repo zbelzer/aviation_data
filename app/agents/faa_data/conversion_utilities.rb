@@ -54,7 +54,8 @@ module FaaData::ConversionUtilities
   def compress_whitespace(path, options = {})
     run_step "Compressing whitespace" do
       `sed -r -i "s/\s+,/,/g" #{path}`
-      `sed -r -i "s/\r$//g" #{path}`
+      `sed -r -i "s/(\r|\032)$//g" #{path}`
+      # `sed -r -i "s/(,\r|\032)/,/g" #{path}`
     end
   end
 
@@ -64,7 +65,14 @@ module FaaData::ConversionUtilities
   # @param [String] path
   def fix_columns(path, options = {})
     run_step "Fixing columns" do
-      `sed -r -i "s/([^,]),$/\\1/g" #{path}` if options[:strip_commas]
+      if options[:strip_commas]
+        `sed -r -i "s/([^,]),$/\\1/g" #{path}`
+      end
+
+      if options[:extra_commas]
+        `sed -r -i "s/(.),$/\\1/g" #{path}`
+      end
+
       `sed -i 's/,\\\\\,/,,/g' #{path}`
     end
   end
@@ -84,9 +92,10 @@ module FaaData::ConversionUtilities
   # @param [Hash] options
   # @param [String] path
   def format_dates(path, options = {})
-    puts "Converting dates with #{options[:date_format]} format"
-    run_step "Formatting dates for native conversion" do
-      case options[:date_format]
+    format = options[:date_format]
+
+    run_step "Formatting dates for native conversion (#{format})" do
+      case format
       when "YYYYMMDD"
         `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
       when "MMDDYYYY"

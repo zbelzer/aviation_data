@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
  
-FaaData::AircraftPackage.find.each do |package|
+packages = FaaData::AircraftPackage.find
+
+packages.each do |package|
+  if package.import_date <= Aircraft.last_import_date
+    puts "Skipping #{package.name}"
+    next
+  end
+
   puts
   puts "=========================="
   puts "Processing #{package.name}"
@@ -14,7 +21,7 @@ FaaData::AircraftPackage.find.each do |package|
 
   puts
   puts "Importing models from ACFTREF"
-  BatchImport::Models.import_latest
+  BatchImport::Models.import_latest(package)
 
   puts
   puts "Importing aircrafts from MASTER"

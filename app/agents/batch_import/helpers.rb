@@ -38,7 +38,7 @@ module BatchImport::Helpers
 
     try_conversion(field_name, source) do
       value = enum_class[source[field_name]]
-      target[enum_field_name] = (value || enum_class.create(:name => record[field_name]))
+      target[enum_field_name] = (value || enum_class.create(:name => source[field_name]))
     end
 
     enum_class.enumeration_model_updates_permitted = false

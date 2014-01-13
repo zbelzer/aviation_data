@@ -17,6 +17,7 @@ class Master < ActiveRecord::Base
   }
 
   scope :missing_identifiers, lambda {
+    select("master.*").
     joins("LEFT JOIN identifiers ON master.identifier = identifiers.code").
     where(:identifiers => {:code => nil}).
     order(:id)

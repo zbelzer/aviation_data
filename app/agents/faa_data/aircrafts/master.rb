@@ -22,7 +22,7 @@ module FaaData::Aircrafts
     VERSION_HEADERS = {
       FaaData::AircraftPackage::VERSION::V1 => [],
       FaaData::AircraftPackage::VERSION::V2 => %w(expiration_date unique_id),
-      FaaData::AircraftPackage::VERSION::V3 => %w(kit_manufacturer kit_model mode_s_code_hex)
+      FaaData::AircraftPackage::VERSION::V3 => %w(expiration_date unique_id kit_manufacturer kit_model mode_s_code_hex)
     }
 
     # Find the headers for this file specified by version.
@@ -31,6 +31,14 @@ module FaaData::Aircrafts
     # @return [Array<String>]
     def self.headers(version)
       BASE_HEADERS + VERSION_HEADERS[version] 
+    end
+
+    # Options to send the import process. Usually hints about how to specially
+    # treat this version.
+    #
+    # @return [Hash]
+    def self.import_options(version)
+      {:extra_commas => true, :date_format => "YYYYMMDD"}
     end
   end
 end

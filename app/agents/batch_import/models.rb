@@ -1,5 +1,7 @@
 # Utilities for importing data from AircraftReference to Model.
 module BatchImport::Models
+  extend BatchImport::Helpers
+
   # Create only new Models from current Master information.
   #
   # @param [Package] package
@@ -23,6 +25,8 @@ module BatchImport::Models
         set_enum(record, model, :manufacturer_name, ManufacturerName)
         set_enum(record, model, :model_name, ModelName)
         set_enum(record, model, :weignt, Weight)
+
+        memo << model
       end 
 
       Model.import(models, :validate => false)

@@ -20,4 +20,10 @@ class Aircraft < ActiveRecord::Base
     :engine_type, :to => :model
 
   delegate :code, :to => :identifier
+
+  # Find the date corresponding to the last imported package.
+  # @return [DateTime]
+  def self.last_import_date
+    maximum(:as_of)
+  end
 end
