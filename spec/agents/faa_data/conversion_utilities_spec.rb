@@ -56,7 +56,7 @@ describe FaaData::ConversionUtilities do
   describe "fix_columns" do
     it "removes *extra* trailing commas" do
       create_tempfile(sample) do |file|
-        FaaData::ConversionUtilities.fix_columns(file.path)
+        FaaData::ConversionUtilities.fix_columns(file.path, {:extra_commas => true})
         compare_tempfile(file, "A4026773,DAVID \"ACE\" JOSEPH,BELZER,12301 MIRASOL,,IRVINE,CA,92620-0304,USA,WP,1,072013,072014")
       end
     end
