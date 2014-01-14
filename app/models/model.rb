@@ -7,4 +7,10 @@ class Model < ActiveRecord::Base
   has_enumerated :weight
   has_enumerated :aircraft_category
   has_enumerated :builder_certification
+
+  # Alias for ActiveAdmin.
+  # @return [String]
+  def name
+    code
+  end
 end

@@ -14,13 +14,16 @@ gem 'yajl-ruby'
 
 gem 'right_aws' # For s3
 
+gem 'activeadmin'
+gem "meta_search",    '>= 1.1.0.pre'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'uglifier'
-  gem 'jquery-rails'
+  gem "jquery-rails", "< 3.0.0"
 end
 
 group :test, :development do
