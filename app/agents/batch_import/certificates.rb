@@ -10,10 +10,10 @@ module BatchImport::Certificates
 
       certificates = batch_scope.each_with_object([]) do |record, memo|
         certificate = Certificate.new(
-          :airman_id           => record.airman_id,
-          :certificate_type_id => record.certificate_type_id,
-          :level               => record.level,
-          :import_date         => package.import_date
+          :airman_id             => record.airman_id,
+          :certificate_type_id   => record.certificate_type_id,
+          :certificate_level_id  => record.certificate_level_id,
+          :import_date           => package.import_date
         )
 
         set_date(record, certificate, :expiration_date)

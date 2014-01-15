@@ -3,7 +3,7 @@ class CreateCertificates < ActiveRecord::Migration
     create_table :certificates do |t|
       t.integer :airman_id
       t.integer :certificate_type_id
-      t.integer :certificates_level_id
+      t.integer :certificate_level_id
       t.date :expiration_date
       t.date :import_date
     end

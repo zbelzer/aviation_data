@@ -3,7 +3,9 @@
 packages = FaaData::AircraftPackage.find
 
 packages.each do |package|
-  if package.import_date <= Aircraft.last_import_date
+  last_import_date = Aircraft.last_import_date
+
+  if last_import_date && package.import_date <= last_import_date
     puts "Skipping #{package.name}"
     next
   end

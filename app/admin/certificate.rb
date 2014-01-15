@@ -7,6 +7,6 @@ ActiveAdmin.register Certificate do
   index do
     column :airman
     column :certificate_type
-    column :level
+    column :certificate_level
   end
 end

@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(:version => 20140113205238) do
   create_table "certificates", :force => true do |t|
     t.integer "airman_id"
     t.integer "certificate_type_id"
-    t.integer "certificates_level_id"
+    t.integer "certificate_level_id"
     t.date    "expiration_date"
     t.date    "import_date"
   end
