@@ -170,6 +170,8 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     rubyzip (1.1.0)
+    rvm-capistrano (1.5.1)
+      capistrano (~> 2.15.4)
     sass (3.2.13)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -223,6 +225,7 @@ DEPENDENCIES
   right_aws
   rspec-rails
   rubyzip
+  rvm-capistrano
   sass-rails
   simplecov
   turn (= 0.8.2)
