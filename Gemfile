@@ -1,4 +1,4 @@
-ruby '2.1.0'
+ruby '1.9.3'
 
 source 'https://rubygems.org'
 
@@ -33,4 +33,5 @@ group :test, :development do
   gem 'simplecov'
   gem 'pry'
   gem 'yard'
+  gem 'capistrano', '2.15.4'
 end
