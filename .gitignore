@@ -12,6 +12,7 @@
 /db/*.sqlite3
 /db/data
 /config/database.yml
+/config/deploy.rb
 
 # Ignore others
 /log

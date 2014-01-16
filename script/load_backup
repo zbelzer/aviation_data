@@ -3,4 +3,4 @@
 rake db:drop
 rake db:create
 
-psql aviation_data_development < $1
+psql aviation_data_${RAILS_ENV} aviation_data < $1

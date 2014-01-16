@@ -13,8 +13,8 @@ class CreateAirports < ActiveRecord::Migration
     end
 
     add_index :airports, :name
-    add_index :airports, :icao, :unique => true
-    add_index :airports, :iata, :unique => true
+    add_index :airports, :icao
+    add_index :airports, :iata
     add_index :airports, :country_id
   end
 end
