@@ -113,8 +113,8 @@ ActiveRecord::Schema.define(:version => 20140113205238) do
   end
 
   add_index "airports", ["country_id"], :name => "index_airports_on_country_id"
-  add_index "airports", ["iata"], :name => "index_airports_on_iata", :unique => true
-  add_index "airports", ["icao"], :name => "index_airports_on_icao", :unique => true
+  add_index "airports", ["iata"], :name => "index_airports_on_iata"
+  add_index "airports", ["icao"], :name => "index_airports_on_icao"
   add_index "airports", ["name"], :name => "index_airports_on_name"
 
   create_table "airworthiness_types", :force => true do |t|

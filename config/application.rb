@@ -27,7 +27,7 @@ module AviationData
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    config.autoload_paths += ["#{config.root}/lib"]
+    config.autoload_paths += ["#{config.root}/lib", "#{config.root}/app"]
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

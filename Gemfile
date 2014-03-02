@@ -17,6 +17,10 @@ gem 'right_aws' # For s3
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
 
+gem "grape"
+gem "roar"
+gem "wisper"
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -35,4 +39,5 @@ group :test, :development do
   gem 'yard'
   gem 'capistrano', '2.15.4'
   gem 'rvm-capistrano'
+  gem 'factory_girl_rails'
 end
