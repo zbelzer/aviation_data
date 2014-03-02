@@ -26,13 +26,20 @@ module FaaData::ConversionUtilities
     FileUtils.rm path if File.exists?(path)
   end
 
+  # Sed command to run.
+  #
+  # @return [String]
+  def sed
+    "/usr/bin/env gsed -r"
+  end
+
   # Escape quotes.
   #
   # @param [Hash] options
   # @param [String] path
   def escape_quotes(path, options = {})
     run_step "Escaping quotes" do
-      `sed -r -i "s#\\"#\\\"#g" #{path}`
+      `#{sed} -i "s#\\"#\\\"#g" #{path}`
     end
   end
 
@@ -42,8 +49,8 @@ module FaaData::ConversionUtilities
   def fill_empty_columns(path)
     run_step "Filling empty columns" do
       null = '\\\\\N'
-      `sed -r -i "s#,,#,#{null},#g" #{path}`
-      `sed -r -i "s#,\\$#,#{null}#g" #{path}`
+      `#{sed} -i "s#,,#,#{null},#g" #{path}`
+      `#{sed} -i "s#,\\$#,#{null}#g" #{path}`
     end
   end
 
@@ -53,9 +60,9 @@ module FaaData::ConversionUtilities
   # @param [String] path
   def compress_whitespace(path, options = {})
     run_step "Compressing whitespace" do
-      `sed -r -i "s/\s+,/,/g" #{path}`
-      `sed -r -i "s/(\r|\032)$//g" #{path}`
-      # `sed -r -i "s/(,\r|\032)/,/g" #{path}`
+      `#{sed} -i "s/\s+,/,/g" #{path}`
+      `#{sed} -i "s/(\r|\032)$//g" #{path}`
+      # `#{sed} -i "s/(,\r|\032)/,/g" #{path}`
     end
   end
 
@@ -66,14 +73,14 @@ module FaaData::ConversionUtilities
   def fix_columns(path, options = {})
     run_step "Fixing columns" do
       if options[:strip_commas]
-        `sed -r -i "s/([^,]),$/\\1/g" #{path}`
+        `#{sed} -i "s/([^,]),$/\\1/g" #{path}`
       end
 
       if options[:extra_commas]
-        `sed -r -i "s/(.),$/\\1/g" #{path}`
+        `#{sed} -i "s/(.),$/\\1/g" #{path}`
       end
 
-      `sed -i 's/,\\\\\,/,,/g' #{path}`
+      `#{sed} -i 's/,\\\\\,/,,/g' #{path}`
     end
   end
 
@@ -83,7 +90,7 @@ module FaaData::ConversionUtilities
   # @param [String] path
   def remove_header(path, options = {})
     run_step "Dropping provided header" do
-      `sed '1d' -i #{path}`
+      `#{sed} '1d' -i #{path}`
     end
   end
 
@@ -97,11 +104,11 @@ module FaaData::ConversionUtilities
     run_step "Formatting dates for native conversion (#{format})" do
       case format
       when "YYYYMMDD"
-        `sed -r -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
+        `#{sed} -i "s#,([1-2]{1}[0-9]{3})([0-9]{2})([0-9]{2})#,\\2\/\\3/\\1#g" #{path}`
       when "MMDDYYYY"
-        `sed -r -i "s#,([0-9]{2})([0-9]{2})([1-2]{1}[0-9]{3})#,\\3\/\\1/\\2#g" #{path}`
+        `#{sed} -i "s#,([0-9]{2})([0-9]{2})([1-2]{1}[0-9]{3})#,\\3\/\\1/\\2#g" #{path}`
       when "MMYYYY"
-        `sed -r -i "s#,([0-9]{2})([1-2]{1}[0-9]{3})#,\\2\/01\/\\1#g" #{path}`
+        `#{sed} -i "s#,([0-9]{2})([1-2]{1}[0-9]{3})#,\\2\/01\/\\1#g" #{path}`
       end
     end
   end

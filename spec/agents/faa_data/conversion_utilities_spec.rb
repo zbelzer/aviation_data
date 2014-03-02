@@ -14,7 +14,8 @@ describe FaaData::ConversionUtilities do
 
   def compare_tempfile(file, expected_data)
     file.open
-    expect(file.read).to eq(expected_data)
+    actual_data = file.read
+    expect(actual_data).to eq(expected_data)
   end
 
   let(:sample_with_spaces) do
