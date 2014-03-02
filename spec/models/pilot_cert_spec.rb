@@ -10,18 +10,23 @@ describe PilotCert do
     describe "missing_certifications" do
       let(:unique_number) { "A12345" }
       let(:certificate_type) { CertificateType["P"] }
+      let(:certificate_level) { CertificateType["A"] }
 
       before do
-        PilotCert.create(:unique_number => unique_number, :certificate_type => certificate_type.name)
+        PilotCert.create!(
+          :unique_number     => unique_number,
+          :certificate_type  => certificate_type.name,
+          :level             => certificate_level.name
+        )
       end
 
       it "finds only certs for airmen who are present in the database" do
-        Airman.create(:unique_number => unique_number)
+        Airman.create!(:unique_number => unique_number)
         expect(PilotCert.missing_certifications).to have(1).record
       end
 
       it "returns returns containing airman_id" do
-        Airman.create(:unique_number => unique_number)
+        Airman.create!(:unique_number => unique_number)
         result = PilotCert.missing_certifications.first
         expect(result.airman_id).to_not be_nil
       end
@@ -37,7 +42,11 @@ describe PilotCert do
         airman = Airman.create(:unique_number => unique_number)
         airman.certificates.create(:certificate_type_id => certificate_type.id)
 
-        PilotCert.create(:unique_number => unique_number, :certificate_type => CertificateType["Y"].name)
+        PilotCert.create!(
+          :unique_number    => unique_number,
+          :certificate_type => CertificateType["Y"].name,
+          :level            => certificate_level.name
+        )
 
         expect(PilotCert.missing_certifications).to have(1).record
       end
