@@ -1,3 +1,3 @@
 # Namespace for Aircraft related business logic.
-module Aircrafts
+module AviationData::Aircrafts
 end

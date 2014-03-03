@@ -30,7 +30,11 @@ module FaaData::ConversionUtilities
   #
   # @return [String]
   def sed
-    "/usr/bin/env gsed -r"
+    if system('which gsed > /dev/null')
+      "gsed -r"
+    else
+      "sed"
+    end
   end
 
   # Escape quotes.

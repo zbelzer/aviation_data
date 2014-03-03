@@ -1,3 +1,3 @@
 # Namespace for Airport related business logic.
-module Airports
+module AviationData::Airports
 end
