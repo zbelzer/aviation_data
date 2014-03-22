@@ -27,9 +27,17 @@ class AviationData::Aircrafts::FindAircraft
     relation =
       Aircraft.
       joins(:identifier).
-      where(identifiers: {code: @identifier})
+      where(identifiers: {code: identifier}).
+      order("as_of ASC")
 
-    relation = relation.merge(Aircraft.where("as_of < ?", @date)) if @date
+    relation = relation.where("as_of <= ?", @date) if @date
     relation.last
+  end
+
+  # Get a normalized identifier to find.
+  #
+  # @return [String]
+  def identifier
+    @identifier.starts_with?("N") ? @identifier[1..-1] : @identifier
   end
 end

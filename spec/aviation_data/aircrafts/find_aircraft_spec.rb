@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe AviationData::Aircrafts::FindAircraft do
   let(:identifier) { "N1234" }
-  let(:params) { { identifier: identifier } }
+  let(:date) { DateTime.new(2013, 3, 4) }
+  let(:params) { { identifier: identifier, date: date } }
   let(:finder) { AviationData::Aircrafts::FindAircraft.new(params) }
 
   describe "run" do
@@ -34,25 +35,37 @@ describe AviationData::Aircrafts::FindAircraft do
   end
 
   describe "find_aircraft" do
-    it "finds an aircraft by identifier" do
-      aircraft = Aircraft.create(:identifier => Identifier.new(:code => identifier))
+    let(:identifier_model) { Identifier.new(:code => "1234") }
+
+    it "finds existing aircraft with date on as_of date" do
+      FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date + 10) # Decoy
+      aircraft = FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date)
+
+      finder = AviationData::Aircrafts::FindAircraft.new(identifier: identifier, date: date)
       expect(finder.find_aircraft).to eq(aircraft)
     end
 
-    it "finds an aircraft by identifier and date" do
-      earlier_date = DateTime.new(2013, 3, 4)
-      as_of_1      = DateTime.new(2013, 6, 6)
-      later_date   = DateTime.new(2014, 2, 4)
-      as_of_2      = DateTime.new(2014, 3, 1)
+    it "doesn't find existing aircraft with date before as_of date" do
+      FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date + 10) # Decoy
+      FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date)
 
-      common_identifier = Identifier.new(:code => identifier)
-      earlier_aircraft = Aircraft.create!(identifier: common_identifier, as_of: earlier_date)
-      later_aircraft = Aircraft.create!(identifier: common_identifier, as_of: later_date)
+      finder = AviationData::Aircrafts::FindAircraft.new(identifier: identifier, date: date - 5)
+      expect(finder.find_aircraft).to be_nil
+    end
 
-      finder = AviationData::Aircrafts::FindAircraft.new(params.merge(date: as_of_1))
+    it "finds existing aircraft with date after as_of date but before next entry" do
+      FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date + 10)
+      earlier_aircraft = FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date)
+
+      finder = AviationData::Aircrafts::FindAircraft.new(identifier: identifier, date: date + 5)
       expect(finder.find_aircraft).to eq(earlier_aircraft)
+    end
 
-      finder = AviationData::Aircrafts::FindAircraft.new(params.merge(date: as_of_2))
+    it "finds existing aircraft belonging to latest entry" do
+      later_aircraft = FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date + 10)
+      FactoryGirl.create(:aircraft, identifier: identifier_model, as_of: date)
+
+      finder = AviationData::Aircrafts::FindAircraft.new(identifier: identifier, date: date + 15)
       expect(finder.find_aircraft).to eq(later_aircraft)
     end
   end

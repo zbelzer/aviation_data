@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140113205238) do
+ActiveRecord::Schema.define(:version => 20140322223158) do
 
 
 
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20140113205238) do
     t.date    "as_of"
   end
 
+  add_index "aircrafts", ["as_of"], :name => "index_aircrafts_on_as_of"
   add_index "aircrafts", ["identifier_id", "model_id"], :name => "index_aircrafts_on_identifier_id_and_model_id", :unique => true
   add_index "aircrafts", ["identifier_id"], :name => "index_aircrafts_on_identifier_id"
   add_index "aircrafts", ["model_id"], :name => "index_aircrafts_on_model_id"
@@ -123,6 +124,46 @@ ActiveRecord::Schema.define(:version => 20140113205238) do
   end
 
   add_index "airworthiness_types", ["name"], :name => "index_airworthiness_types_on_name", :unique => true
+
+  create_table "batches", :id => false, :force => true do |t|
+    t.integer "id"
+    t.string  "identifier"
+    t.string  "serial_number"
+    t.string  "aircraft_model_code"
+    t.string  "engine_mode_code"
+    t.string  "year_manufactured"
+    t.string  "type_registrant"
+    t.string  "registrant_name"
+    t.string  "street1"
+    t.string  "street2"
+    t.string  "registrant_city"
+    t.string  "registrant_state"
+    t.string  "registrant_zip"
+    t.string  "registrant_region"
+    t.string  "county_mail"
+    t.string  "country_mail"
+    t.string  "last_activity_date"
+    t.string  "certificate_issue_date"
+    t.string  "approved_operation_codes"
+    t.string  "type_aircraft"
+    t.string  "type_engine"
+    t.string  "status_code"
+    t.string  "transponder_code"
+    t.string  "fractional_ownership"
+    t.string  "airworthiness_date"
+    t.string  "owner_one"
+    t.string  "owner_two"
+    t.string  "owner_three"
+    t.string  "owner_four"
+    t.string  "owner_five"
+    t.string  "expiration_date"
+    t.string  "unique_id"
+    t.string  "kit_manufacturer"
+    t.string  "kit_model"
+    t.string  "mode_s_code_hex"
+    t.integer "identifier_id"
+    t.integer "model_id"
+  end
 
   create_table "builder_certifications", :force => true do |t|
     t.string "name",        :null => false
