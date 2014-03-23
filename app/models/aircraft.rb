@@ -23,7 +23,13 @@ class Aircraft < ActiveRecord::Base
 
   # Find the date corresponding to the last imported package.
   # @return [DateTime]
-  def self.last_import_date
-    maximum(:as_of)
+  def self.last_import_date(identifier = nil)
+    if identifier
+      joins(:identifier).
+        where(identifiers: {code: identifier}).
+        maximum(:as_of)
+    else
+      maximum(:as_of)
+    end
   end
 end

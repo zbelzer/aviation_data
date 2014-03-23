@@ -13,6 +13,8 @@ class AircraftRepresenter < Roar::Decorator
   property :engine_type
   property :engines
   property :weight
+  property :seats
+  property :builder_certification
   property :cruising_speed
 end
 

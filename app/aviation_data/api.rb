@@ -13,6 +13,7 @@ class AviationData::Api < Grape::API
       finder = AviationData::Aircrafts::FindAircraft.new(params)
 
       finder.on(:success) do |aircraft|
+        header["Expires"] = Time.now.end_of_month.rfc2822
         return AircraftRepresenter.new(aircraft)
       end
 
@@ -34,6 +35,7 @@ class AviationData::Api < Grape::API
       finder = AviationData::Airports::FindAirport.new(params)
 
       finder.on(:success) do |airport|
+        header["Expires"] = Time.now.end_of_month.rfc2822
         return AirportRepresenter.new(airport)
       end
 
