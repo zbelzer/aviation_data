@@ -16,5 +16,6 @@ class AircraftRepresenter < Roar::Decorator
   property :seats
   property :builder_certification
   property :cruising_speed
+  property :as_of
 end
 

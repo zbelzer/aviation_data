@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :identifier do
-    sequence(:code) { |n| "N#{n}" }
+    sequence(:code) { |n| n.to_s }
     identifier_type :n_number
   end
 end

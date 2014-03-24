@@ -18,13 +18,14 @@ describe AviationData::Api do
       result = JSON.parse(response.body)
 
       expect(result).to eq({
-       "aircraft_category" => "land",
-       "aircraft_type"     => "fixed_wing_single_engine",
-       "engine_type"       => "Reciprocating",
-       "identifier"        => "N1",
-       "manufacturer_name" => "101 FLYING ASSOC INC",
-       "model_name"        => " SEAREY",
-       "weight"            => "CLASS 1"
+       "aircraft_category"     => "land",
+       "aircraft_type"         => "fixed_wing_single_engine",
+       "builder_certification" => "Type Certificated",
+       "engine_type"           => "Reciprocating",
+       "identifier"            => "N1",
+       "manufacturer_name"     => "101 FLYING ASSOC INC",
+       "model_name"            => " SEAREY",
+       "weight"                => "CLASS 1"
       })
     end
   end

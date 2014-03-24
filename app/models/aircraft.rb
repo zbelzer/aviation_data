@@ -21,6 +21,17 @@ class Aircraft < ActiveRecord::Base
 
   delegate :code, :to => :identifier
 
+  # @return [String]
+  def code
+    identifier_code = identifier.code
+
+    if identifier.identifier_type === :n_number
+      "N#{identifier_code}"
+    else
+      identifier_code
+    end
+  end
+
   # Find the date corresponding to the last imported package.
   # @return [DateTime]
   def self.last_import_date(identifier = nil)
